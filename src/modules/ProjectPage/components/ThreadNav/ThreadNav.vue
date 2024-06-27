@@ -14,7 +14,7 @@
       <v-divider class="my-0" />
 
       <template v-for="(item, index) in parents" :key="`parent${index}`">
-        <v-list-item :to="`/project/${projectId}/context/${item.id}`">
+        <v-list-item :to="`/project/${projectId}/thread/${item.id}`">
           <template v-slot:prepend>
             <v-avatar color="grey-lighten-1" :size="32">
               <v-icon :size="18" color="white">mdi-message</v-icon>
@@ -35,12 +35,11 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute } from 'vue-router';
 
-const route = useRoute()
-const { params } = route
-console.log(params)
-const { projectId } = params
+const route = useRoute();
+const { params } = route;
+const { projectId } = params;
 
 const parents = [
   {
@@ -108,7 +107,7 @@ const parents = [
     title: 'Новый контекст',
     active: false
   }
-]
+];
 </script>
 
 <style lang="scss" scoped>
@@ -117,7 +116,7 @@ const parents = [
   left: 100%;
   position: absolute;
 
-  &::v-deep(.v-fab__container) {
+  &:deep(.v-fab__container) {
     position: absolute;
     bottom: 20px;
     right: 28px;

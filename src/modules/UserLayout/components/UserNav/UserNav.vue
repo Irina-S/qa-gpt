@@ -28,10 +28,7 @@
   display: flex;
   flex-direction: column;
 
-  // :deep(.v-list-item__spacer) {
-  //   display: none;
-  // }
-  &::v-deep() {
+  &:deep() {
     .v-list-item__spacer {
       display: none;
     }
