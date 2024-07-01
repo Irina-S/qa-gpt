@@ -7,18 +7,6 @@
         to="/project/1"
         class="item py-3"
       ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-folder"
-        title="Проект 2"
-        to="/project/2"
-        class="item py-3"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-folder"
-        title="Проект 2"
-        to="/project/3"
-        class="item py-3"
-      ></v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>

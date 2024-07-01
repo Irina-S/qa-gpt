@@ -1,47 +1,53 @@
 <template>
   <v-navigation-drawer permanent>
-    <v-list density="compact" line="2">
+    <v-list density="compact">
       <v-list-item>
         <template v-slot:prepend>
           <v-avatar color="grey-lighten-1" :size="32">
             <v-icon :size="18" color="white">mdi-view-dashboard</v-icon>
           </v-avatar>
         </template>
-
         <v-list-item-title>Dashboard</v-list-item-title>
-        <v-list-item-subtitle>Description</v-list-item-subtitle>
       </v-list-item>
       <v-divider class="my-0" />
 
-      <template v-for="(item, index) in parents" :key="`parent${index}`">
-        <v-list-item :to="`/project/${projectId}/thread/${item.id}`">
+      <template v-for="(thread, index) in threads" :key="`thread${index}`">
+        <v-list-item :to="`/project/${projectId}/thread/${thread}`">
           <template v-slot:prepend>
             <v-avatar color="grey-lighten-1" :size="32">
               <v-icon :size="18" color="white">mdi-message</v-icon>
             </v-avatar>
           </template>
-
-          <v-list-item-content>
-            <v-list-item-title>Новый контекст {{ item.id }}</v-list-item-title>
-            <v-list-item-subtitle>Description</v-list-item-subtitle>
-          </v-list-item-content>
+          <v-list-item-title>{{ thread }}</v-list-item-title>
         </v-list-item>
         <v-divider class="my-0" />
       </template>
     </v-list>
 
-    <v-fab icon="mdi-chat-plus-outline" color="light-blue-darken-1" class="fab"></v-fab>
+    <v-fab
+      icon="mdi-chat-plus-outline"
+      color="light-blue-darken-1"
+      class="fab"
+      @click="$emit('create')"
+    />
   </v-navigation-drawer>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 
+import type { ThreadNavProps, ThreadNavEmits } from './types';
+
+const props = withDefaults(defineProps<ThreadNavProps>(), {
+  threads: []
+});
+const emits = defineEmits<ThreadNavEmits>();
+
 const route = useRoute();
 const { params } = route;
 const { projectId } = params;
 
-const parents = [
+const mockThreads = [
   {
     id: 1,
     title: 'Новый контекст',

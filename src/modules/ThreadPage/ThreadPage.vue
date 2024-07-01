@@ -1,72 +1,109 @@
 <template>
-  <div class="fill-height d-flex flex-column">
-    <div class="text-h6 px-4 py-3">Контекст {{ route.params?.threadId }}</div>
+  <div class="fill-height d-flex flex-column threadPage">
+    <div class="text-h6 px-4 py-2">{{ route.params?.threadId }}</div>
 
     <v-divider class="my-0" />
 
-    <div class="flex-grow-1 px-4 py-2 overflow-y-auto d-flex flex-column align-stretch justify-end">
-      <template v-for="(msg, i) in messages" :key="i">
-        <div :class="{ 'd-flex flex-row-reverse': msg.me }">
-          <v-chip
-            :color="msg.me ? 'primary' : ''"
-            :rounded="10"
-            style="height: auto; white-space: normal"
-            class="pa-4 mb-2"
-          >
-            {{ msg.content }}
-            <sub class="ml-2" style="font-size: 0.5rem">{{ msg.created_at }}</sub>
-          </v-chip>
-        </div>
-      </template>
-    </div>
+    <ChatMessages :messages="messages" :loading="messagesLoading" />
 
-    <MessageForm />
+    <v-divider class="my-0" />
+
+    <MessageForm :loading="messagesSending" @send="onSend" />
+
+    <v-snackbar v-model="notification.visible" location="top" multi-line close-on-content-click>
+      {{ notification.text }}
+    </v-snackbar>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
+import { ref, watch } from 'vue';
 
+import ChatMessages from './components/ChatMessages/ChatMessages.vue';
 import MessageForm from './components/MessageForm/MessageForm.vue';
+import { createMessageInThread, getMessagesThread } from './service';
+import type { MessageFormContent } from './components/MessageForm/types';
 
-const messages = [
-  {
-    content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-    me: true,
-    created_at: '11:11am'
-  },
-  {
-    content: 'dolor',
-    me: false,
-    created_at: '11:11am'
-  },
-  {
-    content: 'dolor',
-    me: false,
-    created_at: '11:11am'
-  },
-  {
-    content: 'dolor',
-    me: false,
-    created_at: '11:11am'
-  },
-  {
-    content: 'dolor',
-    me: true,
-    created_at: '11:11am'
-  },
-  {
-    content: 'dolor',
-    me: false,
-    created_at: '11:11am'
-  },
-  {
-    content: 'dolor',
-    me: false,
-    created_at: '11:11am'
-  }
-];
+import type { MessageInThread } from './types';
 
 const route = useRoute();
+const { params } = route;
+const { threadId } = params;
+
+const notification = ref({
+  visible: false,
+  text: '',
+  timeout: 3000
+});
+
+const messages = ref<MessageInThread[]>([]);
+const messagesLoading = ref(false);
+const messagesSending = ref(false);
+
+const onSend = async (form: MessageFormContent) => {
+  try {
+    const userMessage: MessageInThread[] = [
+      {
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            text: {
+              value: form.content
+            }
+          }
+        ]
+      }
+    ];
+
+    messages.value.unshift(...userMessage);
+
+    messagesSending.value = true;
+
+    const { data } = await createMessageInThread(threadId as string, userMessage);
+
+    const assitantMessage: MessageInThread[] = [
+      {
+        role: 'assistant',
+        content: [
+          {
+            type: 'text',
+            text: {
+              value: data
+            }
+          }
+        ]
+      }
+    ];
+
+    messages.value.unshift(...assitantMessage);
+  } catch (error) {
+    notification.value.text = error as string;
+    notification.value.visible = true;
+  } finally {
+    messagesSending.value = false;
+  }
+};
+
+const loadMessages = async () => {
+  try {
+    messagesLoading.value = true;
+    const { data } = await getMessagesThread(route.params?.threadId as string);
+    messages.value = [...data];
+  } catch (error) {
+    notification.value.text = error as string;
+    notification.value.visible = true;
+  } finally {
+    messagesLoading.value = false;
+  }
+};
+
+watch(() => route.params?.threadId, loadMessages, { immediate: true });
 </script>
+
+<style scoped lang="scss">
+.threadPage {
+  max-height: 100vh;
+}
+</style>

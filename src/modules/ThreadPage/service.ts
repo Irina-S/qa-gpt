@@ -1,14 +1,18 @@
 import { $api } from '@/config/api';
-import type {
-  CreateMessageInThreadRequest,
-  CreateMessageInThreadResponse,
-  CreateThreadResponse
+import {
+  type GetMessagesInThreadResponse,
+  type CreateMessageInThreadRequest,
+  type CreateMessageInThreadResponse,
+  type GetMessagesInThreadRequest
 } from './types';
 
-export const createThread = () => {
-  return $api.get<CreateThreadResponse>('/createThread');
+export const createMessageInThread = (threadId: string, params: CreateMessageInThreadRequest) => {
+  return $api.post<CreateMessageInThreadResponse>(
+    `/createMessageInThread?thread_id=${threadId}`,
+    params
+  );
 };
 
-export const createMessageInThread = (params: CreateMessageInThreadRequest) => {
-  return $api.get<CreateMessageInThreadResponse>('/createMessageInThread'), { params };
+export const getMessagesThread = (threadId: GetMessagesInThreadRequest) => {
+  return $api.get<GetMessagesInThreadResponse>(`getMessagesThread?thread_id=${threadId}`);
 };

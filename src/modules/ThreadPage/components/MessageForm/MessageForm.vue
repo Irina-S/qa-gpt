@@ -1,18 +1,28 @@
 <template>
-  <div class="border-t-sm px-4 pt-6 pb-3" @drop.prevent="onDrop">
+  <div class="px-4 pt-6 pb-3" @drop.prevent="onDrop">
     <v-textarea
       v-model="messageForm.content"
       placeholder="Введите текст..."
       type="text"
       rows="1"
       variant="outlined"
-      append-icon="mdi-send"
       prepend-icon="mdi-paperclip"
       no-resize
       hide-details
       class="mb-4"
       @click:prepend="onFileUploadClick"
-    />
+    >
+      <template #append>
+        <v-progress-circular
+          v-if="loading"
+          :size="24"
+          :width="3"
+          color="light-blue-darken-3"
+          indeterminate
+        />
+        <v-icon v-else :size="24" color="light-blue-darken-4" @click="onSend">mdi-send</v-icon>
+      </template>
+    </v-textarea>
 
     <v-file-input
       v-if="files.length"
@@ -42,11 +52,11 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-const messageForm = ref({
-  content: '',
-  me: true,
-  created_at: '11:11am'
-});
+import { type MessageFormContent, type MessageFormEmits, type MessageFormProps } from './types';
+
+defineProps<MessageFormProps>();
+
+const emit = defineEmits<MessageFormEmits>();
 
 const files = ref<File[]>([]);
 
@@ -67,6 +77,15 @@ const onFileUploadClick = () => {
   input.multiple = true;
   input.onchange = onFileInput;
   input.click();
+};
+
+const messageForm = ref<MessageFormContent>({
+  content: ''
+});
+
+const onSend = () => {
+  emit('send', messageForm.value);
+  messageForm.value.content = '';
 };
 </script>
 
