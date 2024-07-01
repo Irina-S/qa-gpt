@@ -24,7 +24,7 @@
             style="height: auto; white-space: normal"
             class="pa-4 mb-2 message"
           >
-            <vue3-markdown-it :source="msg.content" />
+            <vue-markdown-it :source="msg.content" :html="true" :linkify="true" />
           </v-chip>
         </div>
       </template>

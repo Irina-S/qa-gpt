@@ -11,11 +11,11 @@ import * as directives from 'vuetify/directives';
 
 import VueMarkdownIt from 'vue3-markdown-it';
 
-import App from './App.vue';
-import router from './router';
-
 import 'markdown-it-latex/dist/index.css';
 import 'highlight.js/styles/monokai.css';
+
+import App from './App.vue';
+import router from './router';
 
 const vuetify = createVuetify({
   components,
