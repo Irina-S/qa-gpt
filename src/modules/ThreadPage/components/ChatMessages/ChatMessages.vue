@@ -24,7 +24,7 @@
             style="height: auto; white-space: normal"
             class="pa-4 mb-2 message"
           >
-            {{ msg.content }}
+            <vue3-markdown-it :source="msg.content" />
           </v-chip>
         </div>
       </template>
@@ -36,6 +36,8 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+import VueMarkdownIt from 'vue3-markdown-it';
+
 import type { ChatMessagesProps } from './types';
 
 const props = defineProps<ChatMessagesProps>();
