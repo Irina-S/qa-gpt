@@ -9,6 +9,7 @@ import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 
+// @ts-ignore
 import VueMarkdownIt from 'vue3-markdown-it';
 
 import 'markdown-it-latex/dist/index.css';

@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer permanent>
-    <v-list density="compact">
+    <v-list density="compact" lines="two">
       <v-list-item>
         <template v-slot:prepend>
           <v-avatar color="grey-lighten-1" :size="32">
@@ -11,14 +11,18 @@
       </v-list-item>
       <v-divider class="my-0" />
 
-      <template v-for="(thread, index) in threads" :key="`thread${index}`">
-        <v-list-item :to="`/project/${projectId}/thread/${thread}`">
+      <template v-for="thread in threads" :key="thread.id">
+        <v-list-item :active="thread.id === route.params.threadId" @click="$emit('select', thread)">
           <template v-slot:prepend>
             <v-avatar color="grey-lighten-1" :size="32">
               <v-icon :size="18" color="white">mdi-message</v-icon>
             </v-avatar>
           </template>
-          <v-list-item-title>{{ thread }}</v-list-item-title>
+
+          <v-list-item-title>{{ thread.name }}</v-list-item-title>
+          <v-list-item-subtitle class="text-no-wrap" :style="{ textOverflow: 'ellipsis' }">{{
+            thread.id
+          }}</v-list-item-subtitle>
         </v-list-item>
         <v-divider class="my-0" />
       </template>
@@ -28,17 +32,26 @@
       icon="mdi-chat-plus-outline"
       color="light-blue-darken-1"
       class="fab"
-      @click="$emit('create')"
+      @click="createModal = true"
     />
+
+    <create-thread-modal v-model="createModal" @create="$emit('create', $event)" />
   </v-navigation-drawer>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
+import { ref } from 'vue';
 
 import type { ThreadNavProps, ThreadNavEmits } from './types';
+import { defineAsyncComponent } from 'vue';
+
+const CreateThreadModal = defineAsyncComponent(
+  () => import('./../CreateThreadModal/CreateThreadModal.vue')
+);
 
 const props = withDefaults(defineProps<ThreadNavProps>(), {
+  // @ts-ignore
   threads: []
 });
 const emits = defineEmits<ThreadNavEmits>();
@@ -47,73 +60,7 @@ const route = useRoute();
 const { params } = route;
 const { projectId } = params;
 
-const mockThreads = [
-  {
-    id: 1,
-    title: 'Новый контекст',
-    active: true
-  },
-  {
-    id: 3,
-    title: 'Новый контекст',
-    active: false
-  },
-  {
-    id: 4,
-    title: 'Новый контекст',
-    active: false
-  },
-  {
-    id: 5,
-    title: 'Новый контекст',
-    active: false
-  },
-  {
-    id: 6,
-    title: 'Новый контекст',
-    active: false
-  },
-  {
-    id: 7,
-    title: 'Новый контекст',
-    active: false
-  },
-  {
-    id: 8,
-    title: 'Новый контекст',
-    active: false
-  },
-  {
-    id: 9,
-    title: 'Новый контекст',
-    active: false
-  },
-  {
-    id: 10,
-    title: 'Новый контекст',
-    active: false
-  },
-  {
-    id: 11,
-    title: 'Новый контекст',
-    active: false
-  },
-  {
-    id: 12,
-    title: 'Новый контекст',
-    active: false
-  },
-  {
-    id: 13,
-    title: 'Новый контекст',
-    active: false
-  },
-  {
-    id: 14,
-    title: 'Новый контекст',
-    active: false
-  }
-];
+const createModal = ref(false);
 </script>
 
 <style lang="scss" scoped>

@@ -2,6 +2,7 @@
   <div class="px-4 pt-6 pb-3" @drop.prevent="onDrop">
     <v-textarea
       v-model="messageForm.content"
+      autofocus
       placeholder="Введите текст..."
       type="text"
       rows="1"

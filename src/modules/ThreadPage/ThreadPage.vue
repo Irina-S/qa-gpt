@@ -1,6 +1,6 @@
 <template>
   <div class="fill-height d-flex flex-column threadPage">
-    <div class="text-h6 px-4 py-2">{{ route.params?.threadId }}</div>
+    <div class="text-h6 px-4 py-2">{{ thread?.name }}</div>
 
     <v-divider class="my-0" />
 
@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { ref, watch } from 'vue';
+import { inject, ref, watch } from 'vue';
 
 import ChatMessages from './components/ChatMessages/ChatMessages.vue';
 import MessageForm from './components/MessageForm/MessageForm.vue';
@@ -26,10 +26,9 @@ import { createMessageInThread, getMessagesThread } from './service';
 import type { MessageFormContent } from './components/MessageForm/types';
 
 import type { MessageInThread } from './types';
+import type { ThreadItem } from '../ProjectPage/types';
 
 const route = useRoute();
-const { params } = route;
-const { threadId } = params;
 
 const notification = ref({
   visible: false,
@@ -40,6 +39,9 @@ const notification = ref({
 const messages = ref<MessageInThread[]>([]);
 const messagesLoading = ref(false);
 const messagesSending = ref(false);
+
+// @ts-ignore
+const { thread }: { thread: ThreadItem } = inject('thread');
 
 const onSend = async (form: MessageFormContent) => {
   try {
@@ -61,7 +63,7 @@ const onSend = async (form: MessageFormContent) => {
 
     messagesSending.value = true;
 
-    const { data } = await createMessageInThread(threadId as string, userMessage);
+    const { data } = await createMessageInThread(route.params.threadId as string, userMessage);
 
     const assitantMessage: MessageInThread[] = [
       {

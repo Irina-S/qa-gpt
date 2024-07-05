@@ -1,7 +1,10 @@
+import type { ThreadItem } from '../../types';
+
 export interface ThreadNavProps {
-  threads?: string[];
+  threads?: ThreadItem[];
 }
 
 export interface ThreadNavEmits {
-  (e: 'create'): void;
+  (e: 'create', value: string): void;
+  (e: 'select', value: ThreadItem): void;
 }

@@ -36,6 +36,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+// @ts-ignore
 import VueMarkdownIt from 'vue3-markdown-it';
 
 import type { ChatMessagesProps } from './types';
@@ -57,8 +58,30 @@ const computedMessages = computed(() =>
 .message {
   border-radius: 24px;
 
-  &::v-deep(.v-chip__content) {
-    white-space: pre-wrap;
+  &::v-deep {
+    pre {
+      white-space: pre-wrap;
+    }
+
+    ul,
+    ol {
+      list-style-position: inside;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    th {
+      background-color: white;
+      font-weight: 500;
+    }
+
+    th,
+    td {
+      border: 1px solid rgb(202, 202, 202);
+      padding: 4px 8px;
+    }
   }
 }
 </style>
