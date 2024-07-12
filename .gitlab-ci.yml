@@ -19,4 +19,4 @@ deploy:
   tags:
     - aip
   script:
-    - docker run -d -p 8080:8080 --name testgpt $DOCKER_IMAGE:$DOCKER_TAG
+    - docker run -d -p 212.113.117.4:8080:8080 --name testgpt $DOCKER_IMAGE:$DOCKER_TAG
