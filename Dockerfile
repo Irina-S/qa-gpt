@@ -1,7 +1,7 @@
 FROM node:latest
 WORKDIR /usr/src/app
 COPY . .
-RUN npm install -g http-server
+RUN npm install -g lite-server
 RUN npm install
 RUN npm run build
-ENTRYPOINT http-server build -p 8080
+ENTRYPOINT lite-server  --baseDir="dist" -p 8080
