@@ -1,6 +1,6 @@
 <template>
   <ThreadNav :threads="threads" @create="onCreateThread" @select="onSelectThread" />
-  <ProjectSidebar />
+  <!-- <ProjectSidebar /> -->
 
   <v-main class="d-flex align-stretch flex-column" style="min-height: 100vh">
     <RouterView v-if="isThreadSelected" />

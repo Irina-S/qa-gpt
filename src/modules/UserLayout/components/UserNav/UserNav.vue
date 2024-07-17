@@ -1,7 +1,8 @@
 <template>
-  <v-navigation-drawer :width="100" class="userNav bg-light-blue-darken-3" permanent>
+  <v-navigation-drawer :width="100" class="userNav" permanent>
     <v-list nav>
       <v-list-item
+        :ripple="false"
         prepend-icon="mdi-folder"
         title="Проект 1"
         to="/project/1"
@@ -10,9 +11,10 @@
     </v-list>
 
     <v-btn
+      :ripple="false"
       icon="mdi-logout"
       variant="text"
-      class="align-self-md-center mt-auto mb-4"
+      class="exitBtn align-self-md-center mt-auto mb-4"
       @click="onLogout"
     />
   </v-navigation-drawer>
@@ -32,6 +34,8 @@ const onLogout = () => {
 
 <style lang="scss" scoped>
 .userNav {
+  border: none;
+
   &:deep() {
     .v-navigation-drawer__content {
       display: flex;
@@ -40,14 +44,67 @@ const onLogout = () => {
   }
 }
 
+.exitBtn {
+  background: none !important;
+  color: var(--color-text-grey) !important;
+
+  &:hover {
+    color: var(--color-text-hover-grey) !important;
+  }
+
+  &::after {
+    display: none !important;
+  }
+
+  &:deep() {
+    .v-btn__overlay {
+      display: none;
+    }
+
+    .v-icon {
+      font-size: 22px;
+    }
+  }
+}
+
 .item {
   display: flex;
   flex-direction: column;
+  gap: 4px;
+  color: var(--color-text-grey);
+  background: none !important;
+
+  &:hover {
+    color: var(--color-text-hover-grey);
+  }
+
+  &::after {
+    display: none !important;
+  }
 
   &:deep() {
+    .v-icon {
+      opacity: 1 !important;
+      font-size: 22px;
+    }
+
+    .v-list-item__overlay {
+      display: none;
+    }
+
     .v-list-item__spacer {
       display: none;
     }
+
+    .v-list-item-title {
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  &.v-list-item--active {
+    color: var(--color-blue) !important;
   }
 }
 </style>

@@ -1,8 +1,14 @@
 <template>
   <v-dialog v-model="localModel" width="auto">
-    <v-card title="Создание контекста" min-width="500">
+    <v-card title="Создание контекста" min-width="500" class="createThreadModal">
       <v-card-text
-        ><v-text-field v-model="text" autofocus label="Название контекста" variant="outlined"
+        ><v-text-field
+          v-model="text"
+          autofocus
+          hide-details
+          placeholder="Название контекста"
+          variant="outlined"
+          class="mt-4"
       /></v-card-text>
 
       <template v-slot:actions>
@@ -38,3 +44,16 @@ const onSave = () => {
   localModel.value = false;
 };
 </script>
+
+<style lang="scss" scoped>
+.createThreadModal {
+  border-radius: 16px !important;
+
+  &:deep() {
+    .v-card-title {
+      font-weight: bold;
+      text-align: center;
+    }
+  }
+}
+</style>

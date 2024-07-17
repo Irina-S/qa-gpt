@@ -1,19 +1,25 @@
 <template>
-  <v-card title="Вход" variant="outlined" border="opacity-25 sm" class="loginForm px-4 pb-6">
-    <v-text-field v-model="form.login" label="Логин" variant="outlined" />
-    <v-text-field v-model="form.password" label="Пароль" type="password" variant="outlined" />
+  <v-card title="Вход" class="loginForm rounded-xl pa-0">
+    <div class="px-6 py-10">
+      <v-text-field v-model="form.login" placeholder="Логин" variant="outlined" />
+      <v-text-field
+        v-model="form.password"
+        placeholder="Пароль"
+        type="password"
+        variant="outlined"
+      />
 
-    <div v-if="error" class="error">{{ error }}</div>
+      <div v-if="error" class="error mb-5">{{ error }}</div>
 
-    <v-card-actions class="d-flex justify-end"
-      ><v-btn
+      <v-btn
+        block
         variant="flat"
         size="large"
-        class="bg-light-blue-darken-3 font-weight-medium"
+        class="loginBtn rounded-pill font-weight-medium"
         @click="onSubmit"
         >Войти</v-btn
-      ></v-card-actions
-    >
+      >
+    </div>
   </v-card>
 </template>
 
@@ -42,16 +48,29 @@ const onSubmit = () => {
 
 <style lang="scss" scoped>
 .loginForm {
-  min-width: 450px;
+  min-width: 400px;
 
   &::v-deep {
-    .v-card-title {
-      margin-bottom: 16px;
+    .v-card-item {
+      padding: 24px 30px;
+
+      text-align: center;
+      background: var(--color-gradient);
+
+      .v-card-title {
+        font-weight: bold;
+        color: white;
+      }
     }
   }
 }
 
 .error {
   color: #d50000;
+}
+
+.loginBtn {
+  background: var(--color-gradient);
+  color: white;
 }
 </style>
