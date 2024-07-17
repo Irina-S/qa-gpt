@@ -1,12 +1,20 @@
 <template>
   <div class="fill-height d-flex flex-column threadPage">
-    <div class="text-h6 px-4 py-2">{{ thread?.name }}</div>
+    <!-- <div class="text-h6 px-4 py-2">{{ thread?.name }}</div> -->
+    <v-list-item :ripple="false" class="threadInfo" lines="two">
+      <template v-slot:prepend>
+        <v-avatar class="avatar" :size="48" color="pink-lighten-2">
+          {{ thread?.name[0] }}
+        </v-avatar>
+      </template>
 
-    <v-divider class="my-0" />
+      <v-list-item-title class="title">{{ thread?.name }}</v-list-item-title>
+      <v-list-item-subtitle class="subtitle text-no-wrap" :style="{ textOverflow: 'ellipsis' }">{{
+        thread?.id
+      }}</v-list-item-subtitle>
+    </v-list-item>
 
     <ChatMessages :messages="messages" :loading="messagesLoading" />
-
-    <v-divider class="my-0" />
 
     <MessageForm :loading="messagesSending" @send="onSend" />
 
@@ -107,5 +115,25 @@ watch(() => route.params?.threadId, loadMessages, { immediate: true });
 <style scoped lang="scss">
 .threadPage {
   max-height: 100vh;
+}
+
+.threadInfo {
+  background: white;
+
+  .title {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 2px;
+  }
+
+  .subtitle {
+    font-size: 11px;
+    color: var(--color-text-grey) !important;
+  }
+
+  .avatar {
+    color: white;
+    font-size: 24px;
+  }
 }
 </style>

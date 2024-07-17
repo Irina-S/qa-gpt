@@ -1,0 +1,42 @@
+@import 'variables';
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+* {
+  font-family: 'Open Sans', sans-serif !important;
+}
+
+body {
+  background: var(--color-bg-grey);
+}
+
+.v-btn {
+  letter-spacing: 0 !important;
+  border-radius: 9999px !important;
+}
+
+.v-field {
+  border: 0.5px solid rgba(0, 0, 0, 0.38);
+  border-radius: 9999px !important;
+
+  &__outline__start,
+  &__outline__end {
+    opacity: 0 !important;
+  }
+
+  &__outline__notch {
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+
+  // .v-label.v-field-label--floating {
+  //   position: relative !important;
+  //   top: 10px;
+  // }
+
+  &__input {
+    border-radius: 9999px !important;
+    padding-inline: 20px 20px;
+  }
+}

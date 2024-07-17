@@ -3,25 +3,26 @@
     <v-textarea
       v-model="messageForm.content"
       autofocus
+      variant="outlined"
       placeholder="Введите текст..."
       type="text"
       rows="1"
-      variant="outlined"
-      prepend-icon="mdi-paperclip"
+      prepend-inner-icon="mdi-paperclip"
       no-resize
       hide-details
-      class="mb-4"
-      @click:prepend="onFileUploadClick"
+      class="textarea mb-4"
+      @click:prepend-inner="onFileUploadClick"
     >
-      <template #append>
+      <template #append-inner>
         <v-progress-circular
           v-if="loading"
           :size="24"
           :width="3"
           color="light-blue-darken-3"
           indeterminate
+          class="loadingBtn"
         />
-        <v-icon v-else :size="24" color="light-blue-darken-4" @click="onSend">mdi-send</v-icon>
+        <v-icon v-else :size="24" class="sendBtn" @click="onSend">mdi-send</v-icon>
       </template>
     </v-textarea>
 
@@ -91,6 +92,29 @@ const onSend = () => {
 </script>
 
 <style lang="scss" scoped>
+.textarea {
+  &:deep() {
+    .v-input,
+    .v-field {
+      background-color: white !important;
+      border: 9999px;
+    }
+  }
+}
+
+.sendBtn {
+  color: var(--color-blue);
+  opacity: 1 !important;
+}
+
+.loadingBtn {
+  &:deep() {
+    .v-progress-circular__overlay {
+      stroke: var(--color-blue) !important;
+    }
+  }
+}
+
 .file {
   &:deep() {
     .v-input__prepend,

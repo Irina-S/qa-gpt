@@ -1,0 +1,10 @@
+:root {
+  --color-bg-grey: #f1f1f1;
+  --color-text-grey: #b9b9b9;
+  --color-text-hover-grey: #8b8b8b;
+  --color-blue: #036ef8;
+  --color-light-blue: #71c4ffff;
+  --color-violet: #6841ea;
+  --color-gradient: linear-gradient(90deg, var(--color-light-blue) 0%, var(--color-violet) 100%);
+  --color-gradient45: linear-gradient(45deg, var(--color-light-blue) 0%, var(--color-violet) 100%);
+}

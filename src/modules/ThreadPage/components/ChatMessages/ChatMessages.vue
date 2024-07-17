@@ -10,7 +10,7 @@
       <v-progress-circular
         :size="70"
         :width="7"
-        color="light-blue-darken-3"
+        class="progress"
         indeterminate
       ></v-progress-circular>
     </template>
@@ -18,12 +18,7 @@
     <template v-else-if="hasMessages">
       <template v-for="(msg, i) in computedMessages" :key="i">
         <div :class="{ 'd-flex flex-row-reverse': msg.me }">
-          <v-chip
-            :color="msg.me ? 'primary' : ''"
-            :rounded="10"
-            style="height: auto; white-space: normal"
-            class="pa-4 mb-2 message"
-          >
+          <v-chip variant="text" :class="['px-3 py-2 mb-2 message', { my: msg.me }]">
             <vue-markdown-it :source="msg.content" :html="true" :linkify="true" />
           </v-chip>
         </div>
@@ -55,8 +50,28 @@ const computedMessages = computed(() =>
 </script>
 
 <style lang="scss" scoped>
+.progress {
+  &:deep() {
+    .v-progress-circular__overlay {
+      stroke: var(--color-blue) !important;
+    }
+  }
+}
+
 .message {
-  border-radius: 24px;
+  border-radius: 0 18px 18px 18px;
+  background: white !important;
+  height: auto;
+  white-space: normal;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.6;
+
+  &.my {
+    border-radius: 18px 0 18px 18px;
+    background-color: var(--color-blue) !important;
+    color: white;
+  }
 
   &::v-deep {
     pre {

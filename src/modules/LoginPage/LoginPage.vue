@@ -1,6 +1,8 @@
 <template>
   <v-layout
-    ><v-main class="d-flex justify-center align-center flex-column" style="min-height: 100vh"
+    ><v-main
+      class="loginPage d-flex justify-center align-center flex-column"
+      style="min-height: 100vh"
       ><LoginForm @login="onLogin" /></v-main
   ></v-layout>
 </template>
@@ -18,3 +20,9 @@ const onLogin = () => {
   router.push({ name: 'main' });
 };
 </script>
+
+<style lang="scss" scoped>
+.loginPage {
+  background: var(--color-bg-grey);
+}
+</style>
