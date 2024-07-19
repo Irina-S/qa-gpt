@@ -1,6 +1,6 @@
-import { $api } from '@/config/api';
-import type { CreateThreadResponse } from './types';
+import { $api } from '@/components/config/api';
+import type { Project } from './types';
 
-export const createThread = () => {
-  return $api.post<CreateThreadResponse>('/createThread');
+export const getProjectsList = () => {
+  return $api.get<Project[]>('/getAllProjects');
 };
