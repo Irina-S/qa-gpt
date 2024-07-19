@@ -1,115 +1,93 @@
 <template>
   <div class="fill-height d-flex flex-column threadPage">
-    <!-- <div class="text-h6 px-4 py-2">{{ thread?.name }}</div> -->
     <v-list-item :ripple="false" class="threadInfo" lines="two">
       <template v-slot:prepend>
         <v-avatar class="avatar" :size="48" color="pink-lighten-2">
-          {{ thread?.name[0] }}
+          {{ thread?.threadId[0] }}
         </v-avatar>
       </template>
 
-      <v-list-item-title class="title">{{ thread?.name }}</v-list-item-title>
-      <v-list-item-subtitle class="subtitle text-no-wrap" :style="{ textOverflow: 'ellipsis' }">{{
-        thread?.id
-      }}</v-list-item-subtitle>
+      <v-list-item-title class="title">{{ thread?.threadId[0] }}</v-list-item-title>
     </v-list-item>
 
-    <ChatMessages :messages="messages" :loading="messagesLoading" />
+    <ChatMessages :messages="messages" :loading="false" />
 
-    <MessageForm :loading="messagesSending" @send="onSend" />
+    <MessageForm :loading="isSending" @send="onSend" />
 
-    <v-snackbar v-model="notification.visible" location="top" multi-line close-on-content-click>
-      {{ notification.text }}
-    </v-snackbar>
+    <v-snackbar v-bind="notification" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { inject, ref, watch } from 'vue';
+import { ref, watch, toRefs } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import ChatMessages from './components/ChatMessages/ChatMessages.vue';
 import MessageForm from './components/MessageForm/MessageForm.vue';
-import { createMessageInThread, getMessagesThread } from './service';
+import { createMessageInThread, getMessagesInThread } from './service';
+
+import { useProjectStore } from '@/modules/ProjectPage/';
+import type { MessageInThread } from './types';
 import type { MessageFormContent } from './components/MessageForm/types';
 
-import type { MessageInThread } from './types';
-import type { ThreadItem } from '../ProjectPage/types';
-
 const route = useRoute();
+const { params } = toRefs(route);
+const { threadId } = toRefs(params.value);
 
-const notification = ref({
-  visible: false,
-  text: '',
-  timeout: 3000
-});
+const projectStore = useProjectStore();
+const { projectThreads, thread } = storeToRefs(projectStore);
+const { setThread } = projectStore;
 
 const messages = ref<MessageInThread[]>([]);
-const messagesLoading = ref(false);
-const messagesSending = ref(false);
+const isSending = ref(false);
+const isLoading = ref(false);
 
-// @ts-ignore
-const { thread }: { thread: ThreadItem } = inject('thread');
+const notification = ref({
+  text: '',
+  visible: false,
+  timeout: 5000
+});
 
 const onSend = async (form: MessageFormContent) => {
   try {
-    const userMessage: MessageInThread[] = [
-      {
-        role: 'user',
-        content: [
-          {
-            type: 'text',
-            text: {
-              value: form.content
-            }
-          }
-        ]
-      }
-    ];
-
-    messages.value.unshift(...userMessage);
-
-    messagesSending.value = true;
-
+    const userMessage: Pick<MessageInThread, 'message'> = {
+      message: form.content
+    };
+    isSending.value = true;
     const { data } = await createMessageInThread(route.params.threadId as string, userMessage);
-
-    const assitantMessage: MessageInThread[] = [
-      {
-        role: 'assistant',
-        content: [
-          {
-            type: 'text',
-            text: {
-              value: data
-            }
-          }
-        ]
-      }
-    ];
-
-    messages.value.unshift(...assitantMessage);
+    messages.value = [...data.messages];
   } catch (error) {
     notification.value.text = error as string;
     notification.value.visible = true;
   } finally {
-    messagesSending.value = false;
+    isSending.value = false;
   }
 };
 
 const loadMessages = async () => {
   try {
-    messagesLoading.value = true;
-    const { data } = await getMessagesThread(route.params?.threadId as string);
-    messages.value = [...data];
+    isLoading.value = true;
+    const { data } = await getMessagesInThread(route.params?.threadId as string);
+    messages.value = [...data.messages];
   } catch (error) {
     notification.value.text = error as string;
     notification.value.visible = true;
   } finally {
-    messagesLoading.value = false;
+    isLoading.value = false;
   }
 };
 
-watch(() => route.params?.threadId, loadMessages, { immediate: true });
+watch(
+  () => threadId.value,
+  (newValue) => {
+    const newThread = projectThreads.value.find((t) => t.threadId === newValue);
+    setThread(newThread);
+
+    loadMessages();
+  },
+  { immediate: true }
+);
 </script>
 
 <style scoped lang="scss">

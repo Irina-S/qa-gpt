@@ -41,10 +41,10 @@ const props = defineProps<ChatMessagesProps>();
 const hasMessages = computed(() => Boolean(props.messages?.length));
 
 const computedMessages = computed(() =>
-  props.messages?.map((msg) => ({
-    id: msg?.id ?? '',
-    content: msg.content[0].text.value,
-    me: msg.role === 'user'
+  props.messages?.map((msg, idx) => ({
+    id: idx,
+    content: msg.message,
+    me: msg.whoWroteMessage === 'user'
   }))
 );
 </script>

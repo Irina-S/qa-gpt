@@ -1,4 +1,4 @@
-import { $api } from '@/config/api';
+import { $api } from '@/components/config/api';
 import {
   type GetMessagesInThreadResponse,
   type CreateMessageInThreadRequest,
@@ -7,12 +7,9 @@ import {
 } from './types';
 
 export const createMessageInThread = (threadId: string, params: CreateMessageInThreadRequest) => {
-  return $api.post<CreateMessageInThreadResponse>(
-    `/createMessageInThread?thread_id=${threadId}`,
-    params
-  );
+  return $api.post<CreateMessageInThreadResponse>(`/${threadId}/messagingInThread`, params);
 };
 
-export const getMessagesThread = (threadId: GetMessagesInThreadRequest) => {
-  return $api.get<GetMessagesInThreadResponse>(`getMessagesThread?thread_id=${threadId}`);
+export const getMessagesInThread = (threadId: GetMessagesInThreadRequest) => {
+  return $api.get<GetMessagesInThreadResponse>(`/${threadId}/listMessagesInThread`);
 };

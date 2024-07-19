@@ -1,68 +1,39 @@
 <template>
   <v-navigation-drawer permanent class="threadNav" :width="320">
-    <v-list density="compact" lines="two" class="py-0">
-      <!-- <v-list-item>
-        <template v-slot:prepend>
-          <v-avatar color="grey-lighten-1" :size="32">
-            <v-icon :size="18" color="white">mdi-view-dashboard</v-icon>
-          </v-avatar>
-        </template>
-        <v-list-item-title>Dashboard</v-list-item-title>
-      </v-list-item>
-      <v-divider class="my-0" /> -->
-
+    <v-list nav density="compact" lines="two" class="py-0">
       <v-list-item-title class="navTitle px-4 py-4">Контексты</v-list-item-title>
 
-      <template v-for="thread in threads" :key="thread.id">
+      <template v-for="tr in projectThreads" :key="tr.id">
         <v-list-item
-          :active="thread.id === route.params.threadId"
+          :to="`/project/${project?.projectId}/thread/${thread?.threadId}`"
           :ripple="false"
           class="item py-2"
-          @click="$emit('select', thread)"
         >
           <template v-slot:prepend>
             <v-avatar class="avatar" :size="48" color="pink-lighten-2">
-              {{ thread.name[0] }}
+              <v-icon name="mdi-shape" />
             </v-avatar>
           </template>
 
-          <v-list-item-title class="title">{{ thread.name }}</v-list-item-title>
+          <v-list-item-title class="title">{{ tr.threadId }}</v-list-item-title>
           <v-list-item-subtitle
             class="subtitle text-no-wrap"
             :style="{ textOverflow: 'ellipsis' }"
-            >{{ thread.id }}</v-list-item-subtitle
+            >{{ tr.openAiThreadId }}</v-list-item-subtitle
           >
         </v-list-item>
       </template>
     </v-list>
-
-    <v-fab icon="mdi-chat-plus-outline" class="fab" @click="createModal = true" />
-
-    <create-thread-modal v-model="createModal" @create="$emit('create', $event)" />
   </v-navigation-drawer>
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
-import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
 
-import type { ThreadNavProps, ThreadNavEmits } from './types';
-import { defineAsyncComponent } from 'vue';
+import { useProjectStore } from '../../store';
 
-const CreateThreadModal = defineAsyncComponent(
-  () => import('./../CreateThreadModal/CreateThreadModal.vue')
-);
-
-const props = withDefaults(defineProps<ThreadNavProps>(), {
-  // @ts-ignore
-  threads: []
-});
-const emits = defineEmits<ThreadNavEmits>();
-
-const route = useRoute();
-const { params } = route;
-
-const createModal = ref(false);
+const projectStore = useProjectStore();
+const { project, thread, projectThreads } = storeToRefs(projectStore);
 </script>
 
 <style lang="scss" scoped>

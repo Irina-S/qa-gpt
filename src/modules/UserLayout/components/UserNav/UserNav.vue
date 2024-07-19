@@ -2,12 +2,14 @@
   <v-navigation-drawer :width="100" class="userNav" permanent>
     <v-list nav>
       <v-list-item
+        v-for="project in projects"
+        :key="project.projectId"
+        :title="project.projectName"
+        :to="`/project/${project.projectId}`"
         :ripple="false"
         prepend-icon="mdi-folder"
-        title="Проект 1"
-        to="/project/1"
         class="item py-3"
-      ></v-list-item>
+      />
     </v-list>
 
     <v-btn
@@ -21,8 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import { setLoggedOut } from '@/shared/utils/auth';
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
+
+import { setLoggedOut } from '@/shared/utils/auth';
+import { useProjectStore } from '@/modules/ProjectPage';
 
 const router = useRouter();
 
@@ -30,6 +35,10 @@ const onLogout = () => {
   setLoggedOut();
   router.push({ name: 'login' });
 };
+
+const projectStore = useProjectStore();
+
+const { projects } = storeToRefs(projectStore);
 </script>
 
 <style lang="scss" scoped>
@@ -40,6 +49,7 @@ const onLogout = () => {
     .v-navigation-drawer__content {
       display: flex;
       flex-direction: column;
+      align-items: center;
     }
   }
 }
