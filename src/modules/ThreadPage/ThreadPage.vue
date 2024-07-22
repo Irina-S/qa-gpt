@@ -3,11 +3,11 @@
     <v-list-item :ripple="false" class="threadInfo" lines="two">
       <template v-slot:prepend>
         <v-avatar class="avatar" :size="48" color="pink-lighten-2">
-          {{ thread?.threadId[0] }}
+          <v-icon icon="mdi-shape" :size="24" />
         </v-avatar>
       </template>
 
-      <v-list-item-title class="title">{{ thread?.threadId[0] }}</v-list-item-title>
+      <v-list-item-title class="title">{{ thread?.threadId }}</v-list-item-title>
     </v-list-item>
 
     <ChatMessages :messages="messages" :loading="false" />
@@ -33,7 +33,7 @@ import type { MessageFormContent } from './components/MessageForm/types';
 
 const route = useRoute();
 const { params } = toRefs(route);
-const { threadId } = toRefs(params.value);
+// const { threadId } = toRefs(params.value);
 
 const projectStore = useProjectStore();
 const { projectThreads, thread } = storeToRefs(projectStore);
@@ -68,7 +68,7 @@ const onSend = async (form: MessageFormContent) => {
 const loadMessages = async () => {
   try {
     isLoading.value = true;
-    const { data } = await getMessagesInThread(route.params?.threadId as string);
+    const { data } = await getMessagesInThread(params.value.threadId as string);
     messages.value = [...data.messages];
   } catch (error) {
     notification.value.text = error as string;
@@ -79,7 +79,7 @@ const loadMessages = async () => {
 };
 
 watch(
-  () => threadId.value,
+  () => params.value.threadId,
   (newValue) => {
     const newThread = projectThreads.value.find((t) => t.threadId === newValue);
     setThread(newThread);

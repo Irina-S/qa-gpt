@@ -5,13 +5,13 @@
 
       <template v-for="tr in projectThreads" :key="tr.id">
         <v-list-item
-          :to="`/project/${project?.projectId}/thread/${thread?.threadId}`"
+          :to="`/project/${project?.projectId}/thread/${tr.threadId}`"
           :ripple="false"
           class="item py-2"
         >
           <template v-slot:prepend>
             <v-avatar class="avatar" :size="48" color="pink-lighten-2">
-              <v-icon name="mdi-shape" />
+              <v-icon icon="mdi-shape" :size="24" />
             </v-avatar>
           </template>
 
