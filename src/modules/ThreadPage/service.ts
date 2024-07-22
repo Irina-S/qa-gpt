@@ -7,9 +7,11 @@ import {
 } from './types';
 
 export const createMessageInThread = (threadId: string, params: CreateMessageInThreadRequest) => {
-  return $api.post<CreateMessageInThreadResponse>(`/${threadId}/messagingInThread`, params);
+  return $api.post<CreateMessageInThreadResponse>(
+    `/${threadId}/messagingInThread/?message=${params.message}`
+  );
 };
 
 export const getMessagesInThread = (threadId: GetMessagesInThreadRequest) => {
-  return $api.get<GetMessagesInThreadResponse>(`/${threadId}/listMessagesInThread`);
+  return $api.get<GetMessagesInThreadResponse>(`/${threadId}/listMessagesInThread/`);
 };

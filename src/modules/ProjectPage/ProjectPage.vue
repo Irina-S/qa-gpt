@@ -18,15 +18,16 @@ import { useProjectStore } from './store';
 
 const route = useRoute();
 const { params } = toRefs(route);
-const { projectId } = toRefs(params.value);
+// const { projectId } = toRefs(params);
 
 const projectStore = useProjectStore();
 const { projects } = storeToRefs(projectStore);
 const { setProject } = projectStore;
 
 watch(
-  () => projectId.value,
+  () => params.value.projectId,
   (newValue) => {
+    console.log('watcher');
     const newProject = projects.value?.find((p) => p.projectId === newValue);
     setProject(newProject);
   },
