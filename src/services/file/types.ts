@@ -1,10 +1,11 @@
 import type { Project } from '@/modules/ProjectPage/types';
 
-export interface UploadSingleFileRequest {
+export interface uploadSingleFileInProjectRequest {
   filePurposeEnum: 'assistants' | 'vision' | 'batch' | 'fine-tune';
+  projectId: string;
 }
 
-export interface UploadSingleFileResponse {
+export interface uploadSingleFileInProjectResponse {
   fileDto: {
     fileId: string;
   };
