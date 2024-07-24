@@ -4,6 +4,7 @@ export interface MessageFormProps {
 
 export interface MessageFormContent {
   content: string;
+  files: File[];
 }
 
 export interface MessageFormEmits {

@@ -82,12 +82,14 @@ const onFileUploadClick = () => {
 };
 
 const messageForm = ref<MessageFormContent>({
-  content: ''
+  content: '',
+  files: []
 });
 
 const onSend = () => {
-  emit('send', messageForm.value);
+  emit('send', { ...messageForm.value, files: files.value });
   messageForm.value.content = '';
+  files.value = [];
 };
 </script>
 
