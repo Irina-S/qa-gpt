@@ -28,6 +28,8 @@ import MessageForm from './components/MessageForm/MessageForm.vue';
 import { createMessageInThread, getMessagesInThread } from './service';
 
 import { useProjectStore } from '@/modules/ProjectPage/';
+import { uploadSingleFile, linkFileToProject } from '@/services/file';
+
 import type { MessageInThread } from './types';
 import type { MessageFormContent } from './components/MessageForm/types';
 
@@ -36,8 +38,8 @@ const { params } = toRefs(route);
 // const { threadId } = toRefs(params.value);
 
 const projectStore = useProjectStore();
-const { projectThreads, thread } = storeToRefs(projectStore);
-const { setThread } = projectStore;
+const { project, projectThreads, thread } = storeToRefs(projectStore);
+const { init, setThread } = projectStore;
 
 const messages = ref<MessageInThread[]>([]);
 const isSending = ref(false);
@@ -49,7 +51,37 @@ const notification = ref({
   timeout: 5000
 });
 
-const onSend = async (form: MessageFormContent) => {
+const loadFilesToProject = async (files: File[]) => {
+  if (!files.length) {
+    return;
+  }
+
+  try {
+    isSending.value = true;
+    const fileInfo = await Promise.all(
+      files.map((file) => uploadSingleFile({ filePurposeEnum: 'assistants' }, file))
+    );
+    await Promise.all(
+      fileInfo.map((file) =>
+        linkFileToProject({
+          projectId: project.value?.projectId ?? '',
+          fileId: file.data.fileDto.fileId
+        })
+      )
+    );
+    init();
+  } catch (error) {
+    notification.value.text = JSON.stringify(error) as string;
+    notification.value.visible = true;
+  } finally {
+    isSending.value = false;
+  }
+};
+
+const sendMessage = async (form: MessageFormContent) => {
+  if (!form.content.length) {
+    return;
+  }
   try {
     const userMessage: Pick<MessageInThread, 'message'> = {
       message: form.content
@@ -58,11 +90,15 @@ const onSend = async (form: MessageFormContent) => {
     const { data } = await createMessageInThread(route.params.threadId as string, userMessage);
     messages.value = [...data.messages];
   } catch (error) {
-    notification.value.text = error as string;
+    notification.value.text = JSON.stringify(error) as string;
     notification.value.visible = true;
   } finally {
     isSending.value = false;
   }
+};
+
+const onSend = async (form: MessageFormContent) => {
+  await Promise.all([sendMessage(form), loadFilesToProject(form.files)]);
 };
 
 const loadMessages = async () => {

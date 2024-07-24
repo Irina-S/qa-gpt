@@ -27,7 +27,6 @@ const { setProject } = projectStore;
 watch(
   () => params.value.projectId,
   (newValue) => {
-    console.log('watcher');
     const newProject = projects.value?.find((p) => p.projectId === newValue);
     setProject(newProject);
   },
