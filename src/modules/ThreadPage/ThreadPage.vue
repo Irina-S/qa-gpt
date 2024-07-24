@@ -14,7 +14,11 @@
 
     <MessageForm :loading="isSending" @send="onSend" />
 
-    <v-snackbar v-bind="notification" />
+    <v-snackbar
+      v-model="notification.visible"
+      :timeout="notification.timeout"
+      :text="notification.text"
+    />
   </div>
 </template>
 
@@ -28,7 +32,7 @@ import MessageForm from './components/MessageForm/MessageForm.vue';
 import { createMessageInThread, getMessagesInThread } from './service';
 
 import { useProjectStore } from '@/modules/ProjectPage/';
-import { uploadSingleFile, linkFileToProject } from '@/services/file';
+import { uploadSingleFileInProject, linkFileToProject } from '@/services/file';
 
 import type { MessageInThread } from './types';
 import type { MessageFormContent } from './components/MessageForm/types';
@@ -58,17 +62,18 @@ const loadFilesToProject = async (files: File[]) => {
 
   try {
     isSending.value = true;
-    const fileInfo = await Promise.all(
-      files.map((file) => uploadSingleFile({ filePurposeEnum: 'assistants' }, file))
-    );
     await Promise.all(
-      fileInfo.map((file) =>
-        linkFileToProject({
-          projectId: project.value?.projectId ?? '',
-          fileId: file.data.fileDto.fileId
-        })
+      files.map((file) =>
+        uploadSingleFileInProject(
+          { filePurposeEnum: 'assistants', projectId: project.value?.projectId ?? '' },
+          file
+        )
       )
     );
+
+    notification.value.text = 'Файл(ы) загружены!';
+    notification.value.visible = true;
+
     init();
   } catch (error) {
     notification.value.text = JSON.stringify(error) as string;
