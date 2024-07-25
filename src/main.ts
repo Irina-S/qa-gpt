@@ -8,6 +8,7 @@ import '@mdi/font/css/materialdesignicons.css';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
+import colors from 'vuetify/util/colors';
 
 // @ts-ignore
 import VueMarkdownIt from 'vue3-markdown-it';
@@ -23,6 +24,17 @@ const vuetify = createVuetify({
   directives,
   icons: {
     defaultSet: 'mdi'
+  },
+  theme: {
+    themes: {
+      light: {
+        dark: false,
+        colors: {
+          primary: '#9351FF',
+          secondary: '#9351FF26'
+        }
+      }
+    }
   }
 });
 

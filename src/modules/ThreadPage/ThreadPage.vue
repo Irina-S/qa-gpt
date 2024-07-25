@@ -1,16 +1,14 @@
 <template>
-  <div class="fill-height d-flex flex-column threadPage">
-    <v-list-item :ripple="false" class="threadInfo" lines="two">
-      <template v-slot:prepend>
-        <v-avatar class="avatar" :size="48" color="pink-lighten-2">
-          <v-icon icon="mdi-shape" :size="24" />
-        </v-avatar>
-      </template>
+  <div class="fill-height d-flex flex-column threadPage rounded-lg border-sm mx-2 px-6">
+    <div class="threadInfo d-flex justify-space-between pa-6">
+      <div class="threadTitle text-h2 text-no-wrap mr-auto">
+        {{ thread?.threadId ?? $route.params.threadId }}
+      </div>
+      <v-icon icon="mdi-bell-outline" :size="24" class="iconBtn mr-5" />
+      <v-icon icon="mdi-cog-outline" :size="24" class="iconBtn" />
+    </div>
 
-      <v-list-item-title class="title">{{ thread?.threadId }}</v-list-item-title>
-    </v-list-item>
-
-    <ChatMessages :messages="messages" :loading="false" />
+    <ChatMessages :messages="messages" :loading="isLoading" />
 
     <MessageForm :loading="isSending" @send="onSend" />
 
@@ -76,7 +74,8 @@ const loadFilesToProject = async (files: File[]) => {
 
     init();
   } catch (error) {
-    notification.value.text = JSON.stringify(error) as string;
+    // @ts-ignore
+    notification.value.text = error?.message ?? 'Ошибка';
     notification.value.visible = true;
   } finally {
     isSending.value = false;
@@ -95,7 +94,8 @@ const sendMessage = async (form: MessageFormContent) => {
     const { data } = await createMessageInThread(route.params.threadId as string, userMessage);
     messages.value = [...data.messages];
   } catch (error) {
-    notification.value.text = JSON.stringify(error) as string;
+    // @ts-ignore
+    notification.value.text = error?.message ?? 'Ошибка';
     notification.value.visible = true;
   } finally {
     isSending.value = false;
@@ -112,7 +112,8 @@ const loadMessages = async () => {
     const { data } = await getMessagesInThread(params.value.threadId as string);
     messages.value = [...data.messages];
   } catch (error) {
-    notification.value.text = error as string;
+    // @ts-ignore
+    notification.value.text = error?.message ?? 'Ошибка';
     notification.value.visible = true;
   } finally {
     isLoading.value = false;
@@ -123,6 +124,7 @@ watch(
   () => params.value.threadId,
   (newValue) => {
     const newThread = projectThreads.value.find((t) => t.threadId === newValue);
+    console.log('www', newThread, newThread);
     setThread(newThread);
 
     loadMessages();
@@ -134,25 +136,17 @@ watch(
 <style scoped lang="scss">
 .threadPage {
   max-height: 100vh;
+  overflow: hidden;
 }
 
 .threadInfo {
   background: white;
+}
 
-  .title {
-    font-size: 13px;
-    font-weight: bold;
-    margin-bottom: 2px;
-  }
-
-  .subtitle {
-    font-size: 11px;
-    color: var(--color-text-grey) !important;
-  }
-
-  .avatar {
-    color: white;
-    font-size: 24px;
-  }
+.threadTitle {
+  overflow: hidden;
+  max-width: 70%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

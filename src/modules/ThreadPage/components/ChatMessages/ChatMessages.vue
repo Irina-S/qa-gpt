@@ -18,14 +18,14 @@
     <template v-else-if="hasMessages">
       <template v-for="(msg, i) in computedMessages" :key="i">
         <div :class="{ 'd-flex flex-row-reverse': msg.me }">
-          <v-chip variant="text" :class="['px-3 py-2 mb-2 message', { my: msg.me }]">
+          <v-chip variant="text" :class="['pt-4 pb-5 px-5 mb-2 message', { my: msg.me }]">
             <vue-markdown-it :source="msg.content" :html="true" :linkify="true" />
           </v-chip>
         </div>
       </template>
     </template>
 
-    <div v-else class="text-subtitle-1">Сообщений пока нет</div>
+    <div v-else>Сообщений пока нет</div>
   </div>
 </template>
 
@@ -53,24 +53,20 @@ const computedMessages = computed(() =>
 .progress {
   &:deep() {
     .v-progress-circular__overlay {
-      stroke: var(--color-blue) !important;
+      stroke: var(--color-primary) !important;
     }
   }
 }
 
 .message {
-  border-radius: 0 18px 18px 18px;
-  background: white !important;
+  border-radius: 4px 16px 16px 16px;
+  background: var(--color-bg-grey);
   height: auto;
   white-space: normal;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.6;
 
   &.my {
-    border-radius: 18px 0 18px 18px;
-    background-color: var(--color-blue) !important;
-    color: white;
+    border-radius: 16px 4px 16px 16px;
+    background-color: #9351ff40 !important;
   }
 
   &::v-deep {

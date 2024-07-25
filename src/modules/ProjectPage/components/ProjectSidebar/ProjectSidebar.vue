@@ -1,33 +1,43 @@
 <template>
-  <v-navigation-drawer location="right" permanent class="projectSidebar">
-    <v-list density="compact" class="py-0">
-      <v-list-item-title class="font-weight-bold px-4 py-4">Файлы проекта</v-list-item-title>
+  <v-navigation-drawer location="right" permanent class="rounded-lg pa-6">
+    <h2 class="text-h2 mb-6">Файлы проекта</h2>
 
-      <template v-if="projectFiles?.length">
-        <v-list-item
-          v-for="file in projectFiles"
-          :key="file.fileId"
-          :title="file.fileName"
-          class="fileItem cursor-pointer py-1 ml-6"
-        >
-          <v-menu activator="parent" class="actionMenu">
-            <v-list density="compact" class="actionList">
-              <v-list-item density="compact" @click="downLoadFile(file)"> Скачать </v-list-item>
-              <v-list-item density="compact" @click="deleteFile(file)"> Удалить </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-list-item>
-      </template>
-      <v-list-item v-else title="Файлов пока нет" class="fileItem py-1 ml-6" />
+    <v-btn
+      :ripple="false"
+      variant="flat"
+      block
+      prepend-icon="mdi-paperclip"
+      class="uploadBtn secondary mb-8"
+      @click="onFileUploadClick"
+    >
+      Добавить файлы</v-btn
+    >
 
+    <v-list v-if="projectFiles?.length" class="pa-0">
       <v-list-item
-        :disabled="isSending"
-        title="Добавить файлы"
-        prepend-icon="mdi-paperclip"
-        class="fileItem addBtn py-1 mt-4"
-        @click="onFileUploadClick"
-      />
+        v-for="file in projectFiles"
+        :key="file.fileId"
+        :title="file.fileName"
+        prepend-icon="mdi-file-outline"
+        class="fileItem cursor-pointer pa-1 ga-2 rounded"
+      >
+        <div class="actionMenu rounded bg-white d-flex ga-1 pa-2 ml-2">
+          <v-icon
+            icon="mdi-tray-arrow-down"
+            :size="16"
+            class="iconBtn"
+            @click="downLoadFile(file)"
+          />
+          <v-icon
+            icon="mdi-trash-can-outline"
+            :size="16"
+            class="iconBtn"
+            @click="deleteFile(file)"
+          />
+        </div>
+      </v-list-item>
     </v-list>
+    <div v-else class="mt-4">Файлов пока нет</div>
 
     <v-snackbar
       v-model="notification.visible"
@@ -42,12 +52,7 @@ import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import { useProjectStore } from '@/modules/ProjectPage';
-import {
-  getFileContent,
-  linkFileToProject,
-  uploadSingleFileInProject,
-  deleteSingleFile
-} from '@/services/file';
+import { getFileContent, uploadSingleFileInProject, deleteSingleFile } from '@/services/file';
 import { download } from '@/shared/utils/files';
 
 import type { ProjectFile } from '../../types';
@@ -69,7 +74,8 @@ const downLoadFile = async (file: ProjectFile) => {
     const { data } = await getFileContent(file.fileId);
     download(file.fileName, data);
   } catch (error) {
-    notification.value.text = JSON.stringify(error) as string;
+    // @ts-ignore
+    notification.value.text = error?.message ?? 'Ошибка';
     notification.value.visible = true;
   }
 };
@@ -85,7 +91,8 @@ const deleteFile = async (file: ProjectFile) => {
     notification.value.text = 'Файл удален!';
     notification.value.visible = true;
   } catch (error) {
-    notification.value.text = JSON.stringify(error) as string;
+    // @ts-ignore
+    notification.value.text = error?.message ?? 'Ошибка';
     notification.value.visible = true;
   }
 };
@@ -110,7 +117,8 @@ const onFileInput = async (e: Event) => {
 
     init();
   } catch (error) {
-    notification.value.text = JSON.stringify(error) as string;
+    // @ts-ignore
+    notification.value.text = error?.message ?? 'Ошибка';
     notification.value.visible = true;
   } finally {
     isSending.value = false;
@@ -127,51 +135,50 @@ const onFileUploadClick = () => {
 </script>
 
 <style lang="scss" scoped>
-.projectSidebar {
-  border: none !important;
-}
-
 .fileItem {
+  min-width: unset !important;
   min-height: unset !important;
+  border-radius: 8px !important;
+  grid-template-columns: 24px 1fr auto;
 
-  :deep() {
-    .v-list-item-title {
-      font-size: 13px;
-      font-weight: 600;
+  &:hover {
+    background-color: var(--color-bg-grey-hover);
+
+    .actionMenu {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+
+  &:deep() {
+    .v-list-item__content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .v-list-item__prepend {
+      min-width: none !important;
+
+      .v-icon {
+        font-size: 24px;
+        color: var(--color-text);
+        opacity: 1 !important;
+      }
     }
   }
 }
 
-.addBtn {
+.uploadBtn {
   :deep() {
-    .v-list-item__prepend {
-      font-size: 13px;
-      max-width: 16px;
-      margin-right: 8px;
+    .v-icon {
+      transform: rotate(45deg);
     }
   }
 }
 
 .actionMenu {
-  &::v-deep {
-    .v-overlay__content {
-      min-width: 100px !important;
-    }
-
-    .v-list {
-      border-radius: 14px !important;
-    }
-  }
-}
-
-.actionList {
-  &::v-deep {
-    .v-list-item {
-      min-height: 24px;
-      font-weight: 500;
-      font-size: 11px !important;
-      padding: 4px 8px !important;
-    }
-  }
+  opacity: 0;
+  pointer-events: none;
 }
 </style>
