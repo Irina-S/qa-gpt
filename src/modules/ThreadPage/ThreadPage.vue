@@ -1,5 +1,5 @@
 <template>
-  <div class="fill-height d-flex flex-column threadPage rounded-lg border-sm mx-2 px-6">
+  <div class="fill-height d-flex flex-column threadPage rounded-lg border-sm px-6">
     <div class="threadInfo d-flex justify-space-between pa-6">
       <div class="threadTitle text-h2 text-no-wrap mr-auto">
         {{ thread?.threadId ?? $route.params.threadId }}

@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer permanent class="threadNav rounded-lg pa-6" :width="368">
+  <div class="threadNav rounded-lg border pa-6">
     <h2 class="text-h2 mb-6">Диалоги</h2>
 
     <v-list nav density="compact" lines="two" class="py-0 d-flex flex-column ga-2">
@@ -22,7 +22,7 @@
         </v-list-item>
       </template>
     </v-list>
-  </v-navigation-drawer>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -35,6 +35,10 @@ const { project, thread, projectThreads } = storeToRefs(projectStore);
 </script>
 
 <style lang="scss" scoped>
+.threadNav {
+  width: 368px;
+}
+
 .threadItem {
   border-radius: 12px;
 
