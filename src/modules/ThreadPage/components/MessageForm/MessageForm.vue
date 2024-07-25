@@ -1,28 +1,32 @@
 <template>
-  <div class="px-4 pt-6 pb-3" @drop.prevent="onDrop">
+  <div class="px-6 pt-6 pb-4" @drop.prevent="onDrop">
     <v-textarea
       v-model="messageForm.content"
+      :max-rows="5"
       autofocus
-      variant="outlined"
+      variant="solo-filled"
       placeholder="Введите текст..."
+      color="var(--color-text-secondary)"
       type="text"
       rows="1"
-      prepend-inner-icon="mdi-paperclip"
       no-resize
       hide-details
-      class="textarea mb-4"
-      @click:prepend-inner="onFileUploadClick"
+      auto-grow
+      class="textarea"
+      @keydown.enter.exact.prevent="onSend"
+      @keydown.enter.shift.exact.prevent="messageForm.content += '\n'"
     >
-      <template #append-inner>
-        <v-progress-circular
-          v-if="loading"
+      <template #prepend-inner>
+        <v-icon
           :size="24"
-          :width="3"
-          color="light-blue-darken-3"
-          indeterminate
-          class="loadingBtn"
+          icon="mdi-paperclip"
+          class="iconBtn fileBtn"
+          @click="onFileUploadClick"
         />
-        <v-icon v-else :size="24" class="sendBtn" @click="onSend">mdi-send</v-icon>
+      </template>
+      <template #append-inner>
+        <v-progress-circular v-if="loading" :size="24" :width="3" indeterminate class="loadingBtn" />
+        <v-icon v-else :size="24" class="iconBtn" @click="onSend">mdi-send</v-icon>
       </template>
     </v-textarea>
 
@@ -32,17 +36,11 @@
       clear-icon="mdi-close"
       multiple
       hide-details
-      class="file"
+      class="file mt-3"
     >
       <template v-slot:selection="{ fileNames }">
         <template v-for="fileName in fileNames" :key="fileName">
-          <v-chip
-            label
-            color="blue-grey-darken-2"
-            size="x-large"
-            prepend-icon="mdi-file"
-            class="cursor-pointer"
-          >
+          <v-chip size="small" prepend-icon="mdi-file-outline" class="cursor-pointer">
             {{ fileName }}
           </v-chip>
         </template>
@@ -96,25 +94,23 @@ const onSend = () => {
 <style lang="scss" scoped>
 .textarea {
   &:deep() {
-    .v-input,
     .v-field {
-      background-color: white !important;
-      border: 9999px;
+      border-radius: 28px;
+      box-shadow: none !important;
+    }
+
+    .v-icon {
+      opacity: 1 !important;
     }
   }
 }
 
-.sendBtn {
-  color: var(--color-blue);
-  opacity: 1 !important;
+.fileBtn {
+  transform: rotate(45deg);
 }
 
 .loadingBtn {
-  &:deep() {
-    .v-progress-circular__overlay {
-      stroke: var(--color-blue) !important;
-    }
-  }
+  color: var(--color-primary);
 }
 
 .file {
@@ -130,13 +126,15 @@ const onSend = () => {
     }
 
     .v-field__input {
+      min-height: unset !important;
+      opacity: 1 !important;
       padding: 0;
       flex-direction: column;
       align-items: flex-start;
 
       .v-chip {
-        height: 36px;
-        padding: 4px 12px;
+        font-size: 12px;
+        color: var(--color-primary) !important;
       }
     }
 
@@ -150,6 +148,16 @@ const onSend = () => {
 
     .v-input {
       padding: 0;
+    }
+
+    .mdi-close {
+      opacity: 1 !important;
+      font-size: 16px !important;
+      color: var(--color-text) !important;
+
+      &:hover {
+        color: var(--color-primary) !important;
+      }
     }
   }
 }

@@ -1,24 +1,12 @@
 <template>
-  <v-card title="Вход" class="loginForm rounded-xl pa-0">
-    <div class="px-6 py-10">
-      <v-text-field v-model="form.login" placeholder="Логин" variant="outlined" />
-      <v-text-field
-        v-model="form.password"
-        placeholder="Пароль"
-        type="password"
-        variant="outlined"
-      />
+  <v-card title="Вход" class="loginForm border rounded-xl pa-0" elevation="0">
+    <div class="px-6 pt-5 pb-6">
+      <v-text-field v-model="form.login" label="Логин" variant="solo-filled" />
+      <v-text-field v-model="form.password" label="Пароль" type="password" variant="solo-filled" />
 
       <div v-if="error" class="error mb-5">{{ error }}</div>
 
-      <v-btn
-        block
-        variant="flat"
-        size="large"
-        class="loginBtn rounded-pill font-weight-medium"
-        @click="onSubmit"
-        >Войти</v-btn
-      >
+      <v-btn block variant="flat" size="large" class="primary" @click="onSubmit">Войти</v-btn>
     </div>
   </v-card>
 </template>
@@ -52,14 +40,13 @@ const onSubmit = () => {
 
   &::v-deep {
     .v-card-item {
-      padding: 24px 30px;
+      padding: 20px 30px 12px;
 
       text-align: center;
-      background: var(--color-gradient);
 
       .v-card-title {
         font-weight: bold;
-        color: white;
+        font-size: 24px;
       }
     }
   }
@@ -67,10 +54,5 @@ const onSubmit = () => {
 
 .error {
   color: #d50000;
-}
-
-.loginBtn {
-  background: var(--color-gradient);
-  color: white;
 }
 </style>

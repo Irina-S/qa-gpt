@@ -1,48 +1,67 @@
 @import 'variables';
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
-* {
+html {
   font-family: 'Open Sans', sans-serif !important;
+  font-size: 16px;
 }
 
-body {
-  background: var(--color-bg-grey);
+// input:-webkit-autofill,
+// input:-webkit-autofill:hover,
+// input:-webkit-autofill:active,
+// input:-webkit-autofill:focus {
+//   background-color: #ffffff !important;
+//   color: #555 !important;
+//   -webkit-box-shadow: 0 0 0 1000px white inset !important;
+//   -webkit-text-fill-color: #555555 !important;
+// }
+
+.iconBtn {
+  color: var(--color-text) !important;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-primary) !important;
+  }
 }
 
 .v-btn {
   letter-spacing: 0 !important;
-  border-radius: 9999px !important;
-}
+  text-transform: none !important;
 
-.v-field {
-  border: 0.5px solid rgba(0, 0, 0, 0.38);
-  border-radius: 9999px !important;
-
-  &__outline__start,
-  &__outline__end {
-    opacity: 0 !important;
+  &.v-btn--size-default {
+    border-radius: 8px !important;
   }
 
-  &__outline__notch {
-    &::before,
-    &::after {
-      display: none;
+  &.primary {
+    background-color: #9351ff;
+    color: white;
+
+    &:hover {
+      background-color: #9351ffd9;
     }
   }
 
-  // .v-label.v-field-label--floating {
-  //   position: relative !important;
-  //   top: 10px;
-  // }
+  &.secondary {
+    background-color: #9351ff1a;
+    color: var(--color-text);
 
-  &__input {
-    border-radius: 9999px !important;
-    padding-inline: 20px 20px;
+    &:hover {
+      background-color: #9351ff26;
+    }
   }
 }
 
-.v-file-input {
-  .v-field {
-    border: none;
+.v-field {
+  box-shadow: none !important;
+  border-radius: 28px !important;
+
+  input {
+    border-radius: 28px;
   }
+}
+
+.v-field--variant-solo-filled .v-field__overlay {
+  opacity: 1 !important;
+  background: var(--color-bg-grey) !important;
 }
