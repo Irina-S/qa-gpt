@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer permanent class="threadNav rounded-lg pa-6" :width="368">
-    <h2 class="text-h2 mb-6">Асистенты</h2>
+    <h2 class="text-h2 mb-6">Ассистенты</h2>
 
     <v-list nav density="compact" lines="two" class="py-0 d-flex flex-column ga-2">
       <template v-for="tr in projectThreads" :key="tr.id">
