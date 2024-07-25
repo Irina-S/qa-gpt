@@ -1,10 +1,11 @@
 <template>
-  <ThreadNav />
-  <ProjectSidebar />
-
-  <v-main class="d-flex align-stretch flex-column" style="min-height: 100vh">
-    <RouterView />
-  </v-main>
+  <div class="projectPage d-flex ga-2">
+    <ThreadNav class="flex-shrink-0" />
+    <div class="chat">
+      <RouterView />
+    </div>
+    <ProjectSidebar class="flex-shrink-0" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -40,3 +41,13 @@ watch(
 //   router.push(`/project/${route.params.projectId}/thread/${thread.id}`);
 // };
 </script>
+
+<style scoped lang="scss">
+.projectPage {
+  max-width: calc(100% - 8px - 180px);
+}
+
+.chat {
+  max-width: calc(100% - 368px - 368px);
+}
+</style>

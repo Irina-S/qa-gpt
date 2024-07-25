@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer :width="180" class="nav rounded-lg" permanent>
+  <div class="nav rounded-lg border py-9" permanent absolute>
     <div class="d-flex flex-column align-center mb-9">
       <v-avatar :size="48" color="#20202014" class="mb-2" />
       <div class="userName font-weight-bold">Админ</div>
@@ -25,7 +25,7 @@
     </v-list>
 
     <v-icon icon="mdi-logout" :size="16" class="exitBtn iconBtn" @click="onLogout" />
-  </v-navigation-drawer>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -50,6 +50,7 @@ const { projects } = storeToRefs(projectStore);
 <style lang="scss" scoped>
 .nav {
   position: relative;
+  width: 180px;
 
   &:deep() {
     .v-navigation-drawer__content {

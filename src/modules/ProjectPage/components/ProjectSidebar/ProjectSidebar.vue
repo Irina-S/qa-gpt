@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer location="right" permanent class="rounded-lg pa-6">
+  <div class="projectSidebar rounded-lg border pa-6 d-flex flex-column">
     <h2 class="text-h2 mb-6">Файлы проекта</h2>
 
     <v-btn
@@ -7,7 +7,7 @@
       variant="flat"
       block
       prepend-icon="mdi-paperclip"
-      class="uploadBtn secondary mb-8"
+      class="uploadBtn secondary mb-8 flex-grow-0"
       @click="onFileUploadClick"
     >
       Добавить файлы</v-btn
@@ -39,12 +39,16 @@
     </v-list>
     <div v-else class="mt-4">Файлов пока нет</div>
 
+    <v-btn variant="flat" block class="primary mt-auto flex-grow-0"
+      >Проверить кач-во документации</v-btn
+    >
+
     <v-snackbar
       v-model="notification.visible"
       :timeout="notification.timeout"
       :text="notification.text"
     />
-  </v-navigation-drawer>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -135,6 +139,10 @@ const onFileUploadClick = () => {
 </script>
 
 <style lang="scss" scoped>
+.projectSidebar {
+  width: 368px;
+}
+
 .fileItem {
   min-width: unset !important;
   min-height: unset !important;
