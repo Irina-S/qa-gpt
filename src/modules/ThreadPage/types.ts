@@ -1,18 +1,17 @@
 export interface MessageInThread {
-  whoWroteMessage: 'user' | 'assistant';
-  message: string;
+  messageId: string;
+  whoWroteMessage: 'User' | 'Assistant';
+  messageDateTime: string;
+  messageText: string;
 }
 
 export interface CreateMessageInThreadRequest {
+  threadId: string;
   message: string;
 }
 
-export interface CreateMessageInThreadResponse {
-  messages: MessageInThread[];
-}
+export type CreateMessageInThreadResponse = MessageInThread[];
 
 export type GetMessagesInThreadRequest = string;
 
-export interface GetMessagesInThreadResponse {
-  messages: MessageInThread[];
-}
+export type GetMessagesInThreadResponse = MessageInThread[];

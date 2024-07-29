@@ -2,7 +2,11 @@
   <div class="fill-height d-flex flex-column threadPage rounded-lg border-sm px-6">
     <div class="threadInfo d-flex justify-space-between pa-6">
       <div class="threadTitle text-h2 text-no-wrap mr-auto">
-        {{ thread?.threadId ?? $route.params.threadId }}
+        {{
+          thread?.threadId && THREAD_ID_TO_NAME[thread.threadId]
+            ? THREAD_ID_TO_NAME[thread.threadId]
+            : $route.params.threadId
+        }}
       </div>
       <v-icon icon="mdi-bell-outline" :size="24" class="iconBtn mr-5" />
       <v-icon icon="mdi-cog-outline" :size="24" class="iconBtn" />
@@ -30,14 +34,14 @@ import MessageForm from './components/MessageForm/MessageForm.vue';
 import { createMessageInThread, getMessagesInThread } from './service';
 
 import { useProjectStore } from '@/modules/ProjectPage/';
-import { uploadSingleFileInProject, linkFileToProject } from '@/services/file';
+import { uploadSingleFileInProject } from '@/services/file';
+import { THREAD_ID_TO_NAME } from '@/shared/const';
 
 import type { MessageInThread } from './types';
 import type { MessageFormContent } from './components/MessageForm/types';
 
 const route = useRoute();
 const { params } = toRefs(route);
-// const { threadId } = toRefs(params.value);
 
 const projectStore = useProjectStore();
 const { project, projectThreads, thread } = storeToRefs(projectStore);
@@ -87,13 +91,17 @@ const sendMessage = async (form: MessageFormContent) => {
     return;
   }
   try {
-    const userMessage: Pick<MessageInThread, 'message'> = {
-      message: form.content
+    const requestParams = {
+      message: form.content,
+      threadId: route.params.threadId as string
     };
     isSending.value = true;
-    const { data } = await createMessageInThread(route.params.threadId as string, userMessage);
-    messages.value = [...data.messages];
+
+    const { data } = await createMessageInThread(requestParams);
+
+    messages.value.push(...data);
   } catch (error) {
+    // @@TODO: типизировать ошибки
     // @ts-ignore
     notification.value.text = error?.message ?? 'Ошибка';
     notification.value.visible = true;
@@ -110,7 +118,7 @@ const loadMessages = async () => {
   try {
     isLoading.value = true;
     const { data } = await getMessagesInThread(params.value.threadId as string);
-    messages.value = [...data.messages];
+    messages.value = data;
   } catch (error) {
     // @ts-ignore
     notification.value.text = error?.message ?? 'Ошибка';
@@ -124,7 +132,6 @@ watch(
   () => params.value.threadId,
   (newValue) => {
     const newThread = projectThreads.value.find((t) => t.threadId === newValue);
-    console.log('www', newThread, newThread);
     setThread(newThread);
 
     loadMessages();

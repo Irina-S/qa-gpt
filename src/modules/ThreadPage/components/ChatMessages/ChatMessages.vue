@@ -16,10 +16,13 @@
     </template>
 
     <template v-else-if="hasMessages">
-      <template v-for="(msg, i) in computedMessages" :key="i">
+      <template v-for="msg in computedMessages" :key="msg.id">
         <div :class="{ 'd-flex flex-row-reverse': msg.me }">
-          <v-chip variant="text" :class="['pt-4 pb-5 px-5 mb-2 message', { my: msg.me }]">
-            <vue-markdown-it :source="msg.content" :html="true" :linkify="true" />
+          <v-chip variant="text" :class="['pt-4 pb-2 px-5 mb-2 message', { my: msg.me }]">
+            <div class="d-flex flex-column ga-1">
+              <vue-markdown-it :source="msg.content" :html="true" :linkify="true" />
+              <div class="text-right messageDate">{{ msg.dateTime }}</div>
+            </div>
           </v-chip>
         </div>
       </template>
@@ -31,6 +34,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+import dayjs from 'dayjs';
 // @ts-ignore
 import VueMarkdownIt from 'vue3-markdown-it';
 
@@ -41,10 +45,11 @@ const props = defineProps<ChatMessagesProps>();
 const hasMessages = computed(() => Boolean(props.messages?.length));
 
 const computedMessages = computed(() =>
-  props.messages?.map((msg, idx) => ({
-    id: idx,
-    content: msg.message,
-    me: msg.whoWroteMessage === 'user'
+  props.messages?.map((msg) => ({
+    id: msg.messageId,
+    content: msg.messageText,
+    me: msg.whoWroteMessage === 'User',
+    dateTime: dayjs(msg.messageDateTime).format('HH:MM')
   }))
 );
 </script>
@@ -67,6 +72,11 @@ const computedMessages = computed(() =>
   &.my {
     border-radius: 16px 4px 16px 16px;
     background-color: #9351ff40 !important;
+  }
+
+  .messageDate {
+    font-size: 8px;
+    color: var(--color-text-secondary);
   }
 
   &::v-deep {

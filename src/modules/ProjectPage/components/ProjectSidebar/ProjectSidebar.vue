@@ -39,7 +39,11 @@
     </v-list>
     <div v-else class="mt-4">Файлов пока нет</div>
 
-    <v-btn variant="flat" block class="primary mt-auto flex-grow-0"
+    <v-btn
+      :to="`/project/${project?.projectId}/thread/${DOCUMENTATION_THREAD_ID}`"
+      variant="flat"
+      block
+      class="primary mt-auto flex-grow-0"
       >Проверить кач-во документации</v-btn
     >
 
@@ -58,6 +62,7 @@ import { storeToRefs } from 'pinia';
 import { useProjectStore } from '@/modules/ProjectPage';
 import { getFileContent, uploadSingleFileInProject, deleteSingleFile } from '@/services/file';
 import { download } from '@/shared/utils/files';
+import { DOCUMENTATION_THREAD_ID } from '@/shared/const';
 
 import type { ProjectFile } from '../../types';
 

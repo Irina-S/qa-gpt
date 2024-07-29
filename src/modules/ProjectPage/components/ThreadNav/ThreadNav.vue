@@ -15,7 +15,9 @@
             </v-avatar>
           </template>
 
-          <v-list-item-title class="title font-weight-bold">{{ tr.threadId }}</v-list-item-title>
+          <v-list-item-title class="title font-weight-bold">{{
+            THREAD_ID_TO_NAME[tr.threadId]
+          }}</v-list-item-title>
           <v-list-item-subtitle class="subtitle text-no-wrap" :style="{ textOverflow: 'ellipsis' }"
             >...</v-list-item-subtitle
           >
@@ -28,10 +30,12 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 
+import { THREAD_ID_TO_NAME } from '@/shared/const';
+
 import { useProjectStore } from '../../store';
 
 const projectStore = useProjectStore();
-const { project, thread, projectThreads } = storeToRefs(projectStore);
+const { project, projectThreads } = storeToRefs(projectStore);
 </script>
 
 <style lang="scss" scoped>
