@@ -1,7 +1,7 @@
 <template>
-  <div class="projectPage d-flex ga-2 justify-space-between">
+  <div class="projectPage d-flex ga-2 justify-space-between flex-grow-1">
     <ThreadNav class="flex-shrink-0" />
-    <div class="chat flex-grow-2">
+    <div class="chat flex-grow-1">
       <RouterView />
     </div>
     <ProjectSidebar class="flex-shrink-0" />

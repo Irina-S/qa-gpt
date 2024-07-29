@@ -1,7 +1,7 @@
 <template>
   <div class="fill-height d-flex flex-column threadPage rounded-lg border-sm px-6">
     <div class="threadInfo d-flex justify-space-between pa-6">
-      <div class="threadTitle text-h2 text-no-wrap mr-auto">
+      <div class="threadTitle text-h2 mr-auto">
         {{ threadName }}
       </div>
       <v-icon icon="mdi-bell-outline" :size="24" class="iconBtn mr-5" />
@@ -153,10 +153,10 @@ watch(
   background: white;
 }
 
-.threadTitle {
-  overflow: hidden;
-  max-width: 70%;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+// .threadTitle {
+//   overflow: hidden;
+//   max-width: 70%;
+//   text-overflow: ellipsis;
+//   white-space: nowrap;
+// }
 </style>
