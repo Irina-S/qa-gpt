@@ -1,5 +1,5 @@
 <template>
-  <div class="projectPage d-flex ga-2">
+  <div class="projectPage w-100 d-flex ga-2 justify-space-between">
     <ThreadNav class="flex-shrink-0" />
     <div class="chat">
       <RouterView />
