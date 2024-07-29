@@ -67,7 +67,7 @@ const computedMessages = computed(() =>
   border-radius: 4px 16px 16px 16px;
   background: var(--color-bg-grey);
   height: auto;
-  white-space: normal;
+  white-space: pre-wrap;
 
   &.my {
     border-radius: 16px 4px 16px 16px;

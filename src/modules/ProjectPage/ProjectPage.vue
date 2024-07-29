@@ -1,7 +1,7 @@
 <template>
-  <div class="projectPage w-100 d-flex ga-2 justify-space-between position-relative">
+  <div class="projectPage d-flex ga-2 justify-space-between">
     <ThreadNav class="flex-shrink-0" />
-    <div class="chat flex-grow-2 w-100">
+    <div class="chat flex-grow-2">
       <RouterView />
     </div>
     <ProjectSidebar class="flex-shrink-0" />
@@ -36,14 +36,14 @@ watch(
 
 <style scoped lang="scss">
 .projectPage {
-  max-width: calc(100% - 8px - 180px);
+  // max-width: calc(100% - 8px - 180px);
 }
 
 .chat {
-  max-width: calc(100% - 368px - 368px);
+  // max-width: calc(100% - 368px - 368px);
 }
 
-.resize-handle {
+.resizeHandle {
   position: absolute;
   bottom: 0;
   right: 0;

@@ -2,11 +2,7 @@
   <div class="fill-height d-flex flex-column threadPage rounded-lg border-sm px-6">
     <div class="threadInfo d-flex justify-space-between pa-6">
       <div class="threadTitle text-h2 text-no-wrap mr-auto">
-        {{
-          thread?.threadId && THREAD_ID_TO_NAME[thread.threadId]
-            ? THREAD_ID_TO_NAME[thread.threadId]
-            : $route.params.threadId
-        }}
+        {{ threadName }}
       </div>
       <v-icon icon="mdi-bell-outline" :size="24" class="iconBtn mr-5" />
       <v-icon icon="mdi-cog-outline" :size="24" class="iconBtn" />
@@ -56,6 +52,8 @@ const notification = ref({
   visible: false,
   timeout: 5000
 });
+
+const threadName = ref('');
 
 const loadFilesToProject = async (files: File[]) => {
   if (!files.length) {
@@ -133,6 +131,11 @@ watch(
   (newValue) => {
     const newThread = projectThreads.value.find((t) => t.threadId === newValue);
     setThread(newThread);
+
+    threadName.value =
+      thread.value?.threadId && THREAD_ID_TO_NAME[thread.value.threadId]
+        ? THREAD_ID_TO_NAME[thread.value.threadId]
+        : (params.value.threadId as string);
 
     loadMessages();
   },

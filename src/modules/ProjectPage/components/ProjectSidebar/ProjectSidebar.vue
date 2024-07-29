@@ -1,5 +1,5 @@
 <template>
-  <div class="projectSidebar rounded-lg border pa-6 d-flex flex-column">
+  <div class="projectSidebar rounded-lg border pa-6 d-flex flex-column position-relative">
     <h2 class="text-h2 mb-6">Файлы проекта</h2>
 
     <v-btn
@@ -52,6 +52,8 @@
       :timeout="notification.timeout"
       :text="notification.text"
     />
+
+    <div class="resizeHandle" @mousedown="startResize" />
   </div>
 </template>
 
@@ -63,12 +65,15 @@ import { useProjectStore } from '@/modules/ProjectPage';
 import { getFileContent, uploadSingleFileInProject, deleteSingleFile } from '@/services/file';
 import { download } from '@/shared/utils/files';
 import { DOCUMENTATION_THREAD_ID } from '@/shared/const';
+import { useResize } from '@/composable/useResize';
 
 import type { ProjectFile } from '../../types';
 
 const projectStore = useProjectStore();
 const { project, projectFiles } = storeToRefs(projectStore);
 const { init } = projectStore;
+
+const { computedWidth, startResize } = useResize('left', 368, 200);
 
 const notification = ref({
   text: '',
@@ -145,7 +150,7 @@ const onFileUploadClick = () => {
 
 <style lang="scss" scoped>
 .projectSidebar {
-  width: 368px;
+  width: v-bind(computedWidth);
 }
 
 .fileItem {
@@ -193,5 +198,15 @@ const onFileUploadClick = () => {
 .actionMenu {
   opacity: 0;
   pointer-events: none;
+}
+
+.resizeHandle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  cursor: w-resize;
+  background-color: transparent;
 }
 </style>
