@@ -1,7 +1,7 @@
 <template>
-  <div class="projectPage w-100 d-flex ga-2 justify-space-between">
+  <div class="projectPage w-100 d-flex ga-2 justify-space-between position-relative">
     <ThreadNav class="flex-shrink-0" />
-    <div class="chat">
+    <div class="chat flex-grow-2 w-100">
       <RouterView />
     </div>
     <ProjectSidebar class="flex-shrink-0" />
@@ -19,7 +19,6 @@ import { useProjectStore } from './store';
 
 const route = useRoute();
 const { params } = toRefs(route);
-// const { projectId } = toRefs(params);
 
 const projectStore = useProjectStore();
 const { projects } = storeToRefs(projectStore);
@@ -33,13 +32,6 @@ watch(
   },
   { immediate: true }
 );
-
-// const router = useRouter();
-
-// const onSelectThread = (thread: ThreadItem) => {
-//   updateThread(thread);
-//   router.push(`/project/${route.params.projectId}/thread/${thread.id}`);
-// };
 </script>
 
 <style scoped lang="scss">
@@ -49,5 +41,15 @@ watch(
 
 .chat {
   max-width: calc(100% - 368px - 368px);
+}
+
+.resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  cursor: nwse-resize;
+  background-color: #ccc;
 }
 </style>
