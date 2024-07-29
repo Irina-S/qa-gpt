@@ -1,5 +1,5 @@
 <template>
-  <div class="nav rounded-lg border py-9" permanent absolute>
+  <div class="nav rounded-lg border py-9">
     <div class="d-flex flex-column align-center mb-9">
       <v-avatar :size="48" color="#20202014" class="mb-2" />
       <div class="userName font-weight-bold">Админ</div>
@@ -37,14 +37,13 @@ import { useProjectStore } from '@/modules/ProjectPage';
 
 const router = useRouter();
 
+const projectStore = useProjectStore();
+const { projects } = storeToRefs(projectStore);
+
 const onLogout = () => {
   setLoggedOut();
   router.push({ name: 'login' });
 };
-
-const projectStore = useProjectStore();
-
-const { projects } = storeToRefs(projectStore);
 </script>
 
 <style lang="scss" scoped>

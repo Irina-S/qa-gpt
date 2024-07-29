@@ -6,9 +6,9 @@ import {
   type GetMessagesInThreadRequest
 } from './types';
 
-export const createMessageInThread = (threadId: string, params: CreateMessageInThreadRequest) => {
+export const createMessageInThread = (params: CreateMessageInThreadRequest) => {
   return $api.post<CreateMessageInThreadResponse>(
-    `/${threadId}/messagingInThread/?message=${params.message}`
+    `/${params.threadId}/createMessageAndGetAnswer/?message=${params.message}`
   );
 };
 
