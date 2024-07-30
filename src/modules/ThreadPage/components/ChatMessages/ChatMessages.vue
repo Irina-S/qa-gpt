@@ -44,13 +44,16 @@ const props = defineProps<ChatMessagesProps>();
 
 const hasMessages = computed(() => Boolean(props.messages?.length));
 
+// @@TODO: убрать reverse, вместо это сделать прокручивание к концу после добавления новых сообщений
 const computedMessages = computed(() =>
-  props.messages?.map((msg) => ({
-    id: msg.messageId,
-    content: msg.messageText,
-    me: msg.whoWroteMessage === 'User',
-    dateTime: dayjs(msg.messageDateTime).format('HH:MM')
-  }))
+  props.messages
+    ?.map((msg) => ({
+      id: msg.messageId,
+      content: msg.messageText,
+      me: msg.whoWroteMessage === 'User',
+      dateTime: dayjs(msg.messageDateTime).format('HH:MM')
+    }))
+    .reverse()
 );
 </script>
 
