@@ -1,14 +1,10 @@
-import './assets/global.scss';
-
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 
+import './assets/global.scss';
+
 import 'vuetify/styles';
 import '@mdi/font/css/materialdesignicons.css';
-import { createVuetify } from 'vuetify';
-import * as components from 'vuetify/components';
-import * as directives from 'vuetify/directives';
-import colors from 'vuetify/util/colors';
 
 // @ts-ignore
 import VueMarkdownIt from 'vue3-markdown-it';
@@ -18,25 +14,7 @@ import 'highlight.js/styles/monokai.css';
 
 import App from './App.vue';
 import router from './router';
-
-const vuetify = createVuetify({
-  components,
-  directives,
-  icons: {
-    defaultSet: 'mdi'
-  },
-  theme: {
-    themes: {
-      light: {
-        dark: false,
-        colors: {
-          primary: '#9351FF',
-          secondary: '#9351FF26'
-        }
-      }
-    }
-  }
-});
+import { vuetify } from './config/vuetify';
 
 const app = createApp(App);
 

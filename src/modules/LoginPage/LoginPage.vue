@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { setLoggedIn } from '@/shared/utils/auth';
+import { setLoggedIn } from '@/utils/auth';
 
 import LoginForm from './components/LoginForm/LoginForm.vue';
 import { useRouter } from 'vue-router';
@@ -18,3 +18,4 @@ const onLogin = () => {
   router.push({ name: 'main' });
 };
 </script>
+@/utils/auth

@@ -69,7 +69,7 @@ const computedMessages = computed(() =>
 .message {
   border-radius: 4px 16px 16px 16px;
   background: var(--color-bg-grey);
-  height: auto;
+  height: auto !important;
   white-space: pre-wrap;
 
   &.my {
@@ -82,7 +82,7 @@ const computedMessages = computed(() =>
     color: var(--color-text-secondary);
   }
 
-  &::v-deep {
+  &:deep() {
     pre {
       white-space: pre-wrap;
     }

@@ -1,4 +1,4 @@
-import { USER_AUTHORIZED_KEY } from '../const';
+import { USER_AUTHORIZED_KEY } from './const';
 
 export const isLoggedIn = () => {
   const isAuthenticated = localStorage.getItem(USER_AUTHORIZED_KEY);

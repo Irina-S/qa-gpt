@@ -1,4 +1,4 @@
-import { $api } from '@/components/config/api';
+import { $api } from '@/config/api';
 import type { Project } from './types';
 
 export const getProjectsList = () => {

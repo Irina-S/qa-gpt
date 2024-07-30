@@ -1,5 +1,5 @@
 <template>
-  <div class="threadNav rounded-lg border pa-6 position-relative">
+  <div class="ThreadList rounded-lg border pa-6 position-relative">
     <h2 class="text-h2 mb-6">Диалоги</h2>
 
     <v-list nav density="compact" lines="two" class="py-0 d-flex flex-column ga-2">
@@ -30,19 +30,18 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 
-import { THREAD_ID_TO_NAME } from '@/shared/const';
+import { THREAD_ID_TO_NAME } from '@/utils/const';
 import { useResize } from '@/composable/useResize';
+import { useProjectsStore } from '@/store/projects';
 
-import { useProjectStore } from '../../store';
-
-const projectStore = useProjectStore();
-const { project, projectThreads } = storeToRefs(projectStore);
+const projectsStore = useProjectsStore();
+const { project, projectThreads } = storeToRefs(projectsStore);
 
 const { computedWidth, startResize } = useResize('right', 368, 200);
 </script>
 
 <style lang="scss" scoped>
-.threadNav {
+.ThreadList {
   width: v-bind(computedWidth);
 }
 
@@ -83,3 +82,4 @@ const { computedWidth, startResize } = useResize('right', 368, 200);
   background-color: transparent;
 }
 </style>
+@/utils/const

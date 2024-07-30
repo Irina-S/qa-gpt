@@ -1,6 +1,6 @@
 <template>
   <div class="projectPage d-flex ga-2 justify-space-between flex-grow-1">
-    <ThreadNav class="flex-shrink-0" />
+    <ThreadList class="flex-shrink-0" />
     <div class="chat flex-grow-1">
       <RouterView />
     </div>
@@ -13,16 +13,17 @@ import { toRefs, watch } from 'vue';
 import { RouterView, useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
-import ThreadNav from './components/ThreadNav/ThreadNav.vue';
+import ThreadList from './components/ThreadList/ThreadList.vue';
 import ProjectSidebar from './components/ProjectSidebar/ProjectSidebar.vue';
-import { useProjectStore } from './store';
+
+import { useProjectsStore } from '@/store/projects';
 
 const route = useRoute();
 const { params } = toRefs(route);
 
-const projectStore = useProjectStore();
-const { projects } = storeToRefs(projectStore);
-const { setProject } = projectStore;
+const projectsStore = useProjectsStore();
+const { projects } = storeToRefs(projectsStore);
+const { setProject } = projectsStore;
 
 watch(
   () => params.value.projectId,

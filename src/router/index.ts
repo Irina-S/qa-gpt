@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import { UserLayout } from '@/modules/UserLayout';
+import { BaseLayout } from '@/modules/BaseLayout';
 import { projectRoutes } from '@/modules/ProjectPage';
 import { loginRoutes } from '@/modules/LoginPage';
-import { isLoggedIn } from '@/shared/utils/auth';
+import { isLoggedIn } from '@/utils/auth';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,7 +11,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'main',
-      component: UserLayout,
+      component: BaseLayout,
       children: [...projectRoutes],
       meta: {
         requireAuth: true

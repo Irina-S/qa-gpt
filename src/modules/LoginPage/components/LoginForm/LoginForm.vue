@@ -38,7 +38,7 @@ const onSubmit = () => {
 .loginForm {
   min-width: 400px;
 
-  &::v-deep {
+  &:deep() {
     .v-card-item {
       padding: 20px 30px 12px;
 

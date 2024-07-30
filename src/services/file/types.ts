@@ -1,4 +1,4 @@
-import type { Project } from '@/modules/ProjectPage/types';
+import type { Project } from '@/store/projects/types';
 
 export interface uploadSingleFileInProjectRequest {
   filePurposeEnum: 'assistants' | 'vision' | 'batch' | 'fine-tune';

@@ -32,13 +32,13 @@
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
-import { setLoggedOut } from '@/shared/utils/auth';
-import { useProjectStore } from '@/modules/ProjectPage';
+import { setLoggedOut } from '@/utils/auth';
+import { useProjectsStore } from '@/store/projects';
 
 const router = useRouter();
 
-const projectStore = useProjectStore();
-const { projects } = storeToRefs(projectStore);
+const projectsStore = useProjectsStore();
+const { projects } = storeToRefs(projectsStore);
 
 const onLogout = () => {
   setLoggedOut();
@@ -119,3 +119,4 @@ const onLogout = () => {
   color: var(--color-text-secondary);
 }
 </style>
+@/utils/auth
