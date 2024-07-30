@@ -61,17 +61,17 @@
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
-import { useProjectStore } from '@/modules/ProjectPage';
+import { useProjectsStore } from '@/store/projects';
 import { getFileContent, uploadSingleFileInProject, deleteSingleFile } from '@/services/file';
-import { download } from '@/shared/utils/files';
-import { DOCUMENTATION_THREAD_ID } from '@/shared/const';
+import { download } from '@/utils/files';
+import { DOCUMENTATION_THREAD_ID } from '@/utils/const';
 import { useResize } from '@/composable/useResize';
 
-import type { ProjectFile } from '../../types';
+import type { ProjectFile } from '@/types/common';
 
-const projectStore = useProjectStore();
-const { project, projectFiles } = storeToRefs(projectStore);
-const { init } = projectStore;
+const projectsStore = useProjectsStore();
+const { project, projectFiles } = storeToRefs(projectsStore);
+const { init } = projectsStore;
 
 const { computedWidth, startResize } = useResize('left', 368, 200);
 
@@ -210,3 +210,4 @@ const onFileUploadClick = () => {
   background-color: transparent;
 }
 </style>
+../../../../store/projects/types @/utils/const @/utils/files

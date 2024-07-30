@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router';
 import type { Project, ProjectThread } from './types';
 import { getProjectsList } from './service';
 
-export const useProjectStore = defineStore('project', () => {
+export const useProjectsStore = defineStore('project', () => {
   const router = useRouter();
 
   const projects = ref<Project[]>();
@@ -31,12 +31,10 @@ export const useProjectStore = defineStore('project', () => {
 
   function setProject(newProject?: Project) {
     project.value = newProject;
-    // router.push(`/project/${project.value?.projectId}`);
   }
 
   function setThread(newThread?: ProjectThread) {
     thread.value = newThread;
-    // router.push(`/project/${project.value?.projectId}/thread/${thread.value?.threadId}`);
   }
 
   return { projects, project, projectThreads, projectFiles, init, setProject, thread, setThread };

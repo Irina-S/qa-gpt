@@ -29,9 +29,9 @@ import ChatMessages from './components/ChatMessages/ChatMessages.vue';
 import MessageForm from './components/MessageForm/MessageForm.vue';
 import { createMessageInThread, getMessagesInThread } from './service';
 
-import { useProjectStore } from '@/modules/ProjectPage/';
+import { useProjectsStore } from '@/store/projects';
 import { uploadSingleFileInProject } from '@/services/file';
-import { THREAD_ID_TO_NAME } from '@/shared/const';
+import { THREAD_ID_TO_NAME } from '@/utils/const';
 
 import type { MessageInThread } from './types';
 import type { MessageFormContent } from './components/MessageForm/types';
@@ -39,9 +39,9 @@ import type { MessageFormContent } from './components/MessageForm/types';
 const route = useRoute();
 const { params } = toRefs(route);
 
-const projectStore = useProjectStore();
-const { project, projectThreads, thread } = storeToRefs(projectStore);
-const { init, setThread } = projectStore;
+const projectsStore = useProjectsStore();
+const { project, projectThreads } = storeToRefs(projectsStore);
+const { init, setThread } = projectsStore;
 
 const messages = ref<MessageInThread[]>([]);
 const isSending = ref(false);
@@ -132,10 +132,7 @@ watch(
     const newThread = projectThreads.value.find((t) => t.threadId === newValue);
     setThread(newThread);
 
-    threadName.value =
-      thread.value?.threadId && THREAD_ID_TO_NAME[thread.value.threadId]
-        ? THREAD_ID_TO_NAME[thread.value.threadId]
-        : (params.value.threadId as string);
+    threadName.value = THREAD_ID_TO_NAME[newValue as string] ?? newValue;
 
     loadMessages();
   },
@@ -160,3 +157,4 @@ watch(
 //   white-space: nowrap;
 // }
 </style>
+@/utils/const

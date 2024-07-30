@@ -1,9 +1,5 @@
-// export type CreateThreadResponse = string;
+import type { ProjectFile } from '@/types/common';
 
-// export interface ThreadItem {
-//   id: string;
-//   name: string;
-// }
 export interface Project {
   projectId: string;
   projectName: string;
@@ -23,11 +19,4 @@ export interface ProjectThread {
   openAiThreadId: string;
   assistant: ProjectAssistant;
   project: string;
-}
-
-export interface ProjectFile {
-  fileId: string;
-  openAiFileId: string;
-  fileName: string;
-  content: string[];
 }
