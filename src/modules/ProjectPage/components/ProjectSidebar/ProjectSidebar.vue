@@ -119,10 +119,7 @@ const onFileInput = async (e: Event) => {
     isSending.value = true;
     await Promise.all(
       files.map((file) =>
-        uploadSingleFileInProject(
-          { filePurposeEnum: 'assistants', projectId: project.value?.projectId ?? '' },
-          file
-        )
+        uploadSingleFileInProject({ projectId: project.value?.projectId ?? '' }, file)
       )
     );
 

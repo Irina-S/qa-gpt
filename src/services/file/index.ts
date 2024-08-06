@@ -4,16 +4,16 @@ import type {
   DeleteFileResponse,
   LinkFileToProjectRequest,
   LinkFileToProjectResponse,
-  uploadSingleFileInProjectRequest,
-  uploadSingleFileInProjectResponse
+  UploadSingleFileInProjectRequest,
+  UploadSingleFileInProjectResponse
 } from './types';
 
-export const uploadSingleFileInProject = (params: uploadSingleFileInProjectRequest, file: File) => {
+export const uploadSingleFileInProject = (params: UploadSingleFileInProjectRequest, file: File) => {
   const formData = new FormData();
   formData.append('multipartFile', file);
 
-  return $api.post<uploadSingleFileInProjectResponse>(
-    `/uploadSingleFileInProject?filePurposeEnum=${params.filePurposeEnum}&projectId=${params.projectId}`,
+  return $api.post<UploadSingleFileInProjectResponse>(
+    `/UploadSingleFileInProject?projectId=${params.projectId}`,
     formData,
     {
       headers: {
