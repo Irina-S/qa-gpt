@@ -27,9 +27,10 @@ import { storeToRefs } from 'pinia';
 
 import ChatMessages from './components/ChatMessages/ChatMessages.vue';
 import MessageForm from './components/MessageForm/MessageForm.vue';
-import { createMessageInThread, getMessagesInThread } from './service';
+import { getMessagesInThread } from './service';
 
 import { useProjectsStore } from '@/store/projects';
+import { useWebSocketStore } from '@/store/ws';
 import { uploadSingleFileInProject } from '@/services/file';
 import { THREAD_ID_TO_NAME } from '@/utils/const';
 
@@ -42,6 +43,8 @@ const { params } = toRefs(route);
 const projectsStore = useProjectsStore();
 const { project, projectThreads } = storeToRefs(projectsStore);
 const { init, setThread } = projectsStore;
+
+const wsStore = useWebSocketStore();
 
 const messages = ref<MessageInThread[]>([]);
 const isSending = ref(false);
@@ -64,10 +67,7 @@ const loadFilesToProject = async (files: File[]) => {
     isSending.value = true;
     await Promise.all(
       files.map((file) =>
-        uploadSingleFileInProject(
-          { filePurposeEnum: 'assistants', projectId: project.value?.projectId ?? '' },
-          file
-        )
+        uploadSingleFileInProject({ projectId: project.value?.projectId ?? '' }, file)
       )
     );
 
@@ -84,32 +84,18 @@ const loadFilesToProject = async (files: File[]) => {
   }
 };
 
-const sendMessage = async (form: MessageFormContent) => {
+const sendMessage = (form: MessageFormContent) => {
   if (!form.content.length) {
     return;
   }
-  try {
-    const requestParams = {
-      message: form.content,
-      threadId: route.params.threadId as string
-    };
-    isSending.value = true;
 
-    const { data } = await createMessageInThread(requestParams);
-
-    messages.value.push(...data);
-  } catch (error) {
-    // @@TODO: типизировать ошибки
-    // @ts-ignore
-    notification.value.text = error?.message ?? 'Ошибка';
-    notification.value.visible = true;
-  } finally {
-    isSending.value = false;
-  }
+  isSending.value = true;
+  wsStore.sendMessage(route.params.threadId as string, form.content);
 };
 
 const onSend = async (form: MessageFormContent) => {
-  await Promise.all([sendMessage(form), loadFilesToProject(form.files)]);
+  sendMessage(form);
+  loadFilesToProject(form.files);
 };
 
 const loadMessages = async () => {
@@ -126,17 +112,31 @@ const loadMessages = async () => {
   }
 };
 
+const onRecieveMessage = (message: MessageInThread) => {
+  messages.value.push(message);
+  isSending.value = false;
+};
+
 watch(
-  () => params.value.threadId,
+  () => params.value.threadId as string,
   (newValue) => {
     const newThread = projectThreads.value.find((t) => t.threadId === newValue);
     setThread(newThread);
 
-    threadName.value = THREAD_ID_TO_NAME[newValue as string] ?? newValue;
+    threadName.value = THREAD_ID_TO_NAME[newValue] ?? newValue;
 
     loadMessages();
   },
   { immediate: true }
+);
+
+watch(
+  () => [params.value.threadId as string, wsStore.isConnected],
+  ([threadId, isConnected]) => {
+    if (isConnected && threadId) {
+      wsStore.subscribeToMessages(threadId as string, onRecieveMessage);
+    }
+  }
 );
 </script>
 

@@ -1,13 +1,10 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
-import { useRouter } from 'vue-router';
 
 import type { Project, ProjectThread } from './types';
 import { getProjectsList } from './service';
 
 export const useProjectsStore = defineStore('project', () => {
-  const router = useRouter();
-
   const projects = ref<Project[]>();
 
   const project = ref<Project>();

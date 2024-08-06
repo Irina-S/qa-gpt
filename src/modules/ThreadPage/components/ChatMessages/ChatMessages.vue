@@ -50,7 +50,7 @@ const computedMessages = computed(() =>
     ?.map((msg) => ({
       id: msg.messageId,
       content: msg.messageText,
-      me: msg.whoWroteMessage === 'User',
+      me: msg.whoWroteMessage === 'USER',
       dateTime: dayjs(msg.messageDateTime).format('HH:MM')
     }))
     .reverse()
