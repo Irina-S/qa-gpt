@@ -1,4 +1,4 @@
-import { $api } from '@/config/api';
+import { $api } from '@/api/axios';
 import { type GetMessagesInThreadResponse, type GetMessagesInThreadRequest } from './types';
 
 export const getMessagesInThread = (threadId: GetMessagesInThreadRequest) => {

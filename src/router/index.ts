@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import { isLoggedIn } from '@/utils/auth';
-import { BaseLayout } from '@/layouts/BaseLayout';
-import LoginLayout from '@/layouts/LoginLayout/LoginLayout.vue';
+import { useUserStore } from '@/store/user';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,10 +38,12 @@ const router = createRouter({
   ]
 });
 
-router.beforeEach((to, from, next) => {
-  const isAuthorized = isLoggedIn();
-  if (!isAuthorized && Boolean(to.meta?.requireAuth)) next({ name: 'login' });
-  else next();
-});
+// @@TODO: вернуть кастомную страницу авторизации по возможности
+// router.beforeEach((to, from, next) => {
+//   const userStore = useUserStore();
+
+//   if (!userStore.isAuthorized && Boolean(to.meta?.requireAuth)) next({ name: 'login' });
+//   else next();
+// });
 
 export default router;
