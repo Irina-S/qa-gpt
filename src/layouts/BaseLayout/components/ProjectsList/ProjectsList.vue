@@ -32,8 +32,9 @@
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
-import { setLoggedOut } from '@/utils/auth';
 import { useProjectsStore } from '@/store/projects';
+
+import keyclockController from '@/api/keycloak';
 
 const router = useRouter();
 
@@ -41,8 +42,8 @@ const projectsStore = useProjectsStore();
 const { projects } = storeToRefs(projectsStore);
 
 const onLogout = () => {
-  setLoggedOut();
-  router.push({ name: 'login' });
+  keyclockController.logout();
+  // router.push({ name: 'login' });
 };
 </script>
 

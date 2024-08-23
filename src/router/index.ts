@@ -1,9 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import { BaseLayout } from '@/modules/BaseLayout';
-import { projectRoutes } from '@/modules/ProjectPage';
-import { loginRoutes } from '@/modules/LoginPage';
-import { isLoggedIn } from '@/utils/auth';
+import { useUserStore } from '@/store/user';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,20 +8,42 @@ const router = createRouter({
     {
       path: '/',
       name: 'main',
-      component: BaseLayout,
-      children: [...projectRoutes],
       meta: {
-        requireAuth: true
-      }
+        requireAuth: true,
+        layout: 'base'
+      },
+      children: [
+        {
+          path: '/project/:projectId',
+          name: 'project',
+          component: () => import('@/pages/ProjectPage/ProjectPage.vue'),
+          children: [
+            {
+              path: 'thread/:threadId',
+              name: 'thread',
+              component: () => import('@/pages/ThreadPage/ThreadPage.vue')
+            }
+          ]
+        }
+      ]
     },
-    ...loginRoutes
+    {
+      path: '/login',
+      name: 'login',
+      meta: {
+        layout: 'login'
+      },
+      component: () => import('@/pages/LoginPage/LoginPage.vue')
+    }
   ]
 });
 
-router.beforeEach((to, from, next) => {
-  const isAuthorized = isLoggedIn();
-  if (!isAuthorized && Boolean(to.meta?.requireAuth)) next({ name: 'login' });
-  else next();
-});
+// @@TODO: вернуть кастомную страницу авторизации по возможности
+// router.beforeEach((to, from, next) => {
+//   const userStore = useUserStore();
+
+//   if (!userStore.isAuthorized && Boolean(to.meta?.requireAuth)) next({ name: 'login' });
+//   else next();
+// });
 
 export default router;

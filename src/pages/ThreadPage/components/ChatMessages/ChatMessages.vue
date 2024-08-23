@@ -44,7 +44,6 @@ const props = defineProps<ChatMessagesProps>();
 
 const hasMessages = computed(() => Boolean(props.messages?.length));
 
-// @@TODO: убрать reverse, вместо это сделать прокручивание к концу после добавления новых сообщений
 const computedMessages = computed(() =>
   props.messages
     ?.map((msg) => ({

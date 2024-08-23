@@ -14,8 +14,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const onLogin = () => {
-  setLoggedIn();
+  // setLoggedIn();
   router.push({ name: 'main' });
 };
 </script>
-@/utils/auth
