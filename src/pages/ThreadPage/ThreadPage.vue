@@ -123,7 +123,8 @@ watch(
     const newThread = projectThreads.value.find((t) => t.threadId === newValue);
     setThread(newThread);
 
-    threadName.value = THREAD_ID_TO_NAME[newValue] ?? newValue;
+    const threadIdx = projectThreads.value.findIndex((tr) => newThread?.threadId === tr.threadId);
+    threadName.value = THREAD_ID_TO_NAME[threadIdx] ?? newValue;
 
     loadMessages();
   },
