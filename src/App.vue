@@ -30,7 +30,7 @@ const layoutComponent = computed(() => {
 
 onMounted(() => {
   keycloakController.initKeycloak().then((res) => {
-    console.log(res);
+    console.log('authorized', res);
     userStore.setIsAuthorized(res.authentificated);
   });
 });

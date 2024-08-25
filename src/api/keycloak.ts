@@ -2,7 +2,6 @@ import type { InternalAxiosRequestConfig, AxiosInstance } from 'axios';
 import Keycloak, { type KeycloakTokenParsed } from 'keycloak-js';
 
 import { $api } from '@/api/axios';
-import { stompClient } from '@/api/stomp';
 import { keycloakConfig } from '@/config/keycloak';
 
 interface InitKeycloakResult {
@@ -41,6 +40,7 @@ class KeycloakController {
         redirectUri: keycloakConfig.redirect_uri
       })
       .then<InitKeycloakResult>((authentificated) => {
+        console.log('from then', authentificated);
         if (authentificated) {
           console.log('AUTHETIFICATED, DATE: ', new Date());
           console.log(this.keycloak?.tokenParsed);
@@ -53,7 +53,8 @@ class KeycloakController {
           authentificated
         };
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log('from catch', err);
         return {
           authentificated: false
         };
@@ -61,7 +62,6 @@ class KeycloakController {
 
     if (result.authentificated) {
       this.runAxiosTokenInterceptor();
-      this.runStompConnectHeaders();
     }
     return result;
   }
@@ -146,13 +146,6 @@ class KeycloakController {
         });
       }
     );
-  }
-
-  private runStompConnectHeaders(): void {
-    const tok = `Bearer ${this.keycloak.token}`;
-    stompClient.connectHeaders = {
-      Authorization: tok
-    };
   }
 }
 
