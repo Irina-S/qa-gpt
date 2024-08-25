@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 import { useProjectsStore } from '@/store/projects';
 import { useWebSocketStore } from '@/store/ws';
@@ -39,16 +39,12 @@ const wsStore = useWebSocketStore();
 
 const projectsStore = useProjectsStore();
 
-watch(
-  () => userStore.isAuthorized,
-  () => {
-    if (userStore.isAuthorized) {
-      wsStore.connect({ onError: onWsConnectError });
-      window.onclose = () => wsStore.disconnect();
+onMounted(() => {
+  if (userStore.isAuthorized) {
+    wsStore.connect({ onError: onWsConnectError });
+    window.onclose = () => wsStore.disconnect();
 
-      projectsStore.init();
-    }
-  },
-  { immediate: true }
-);
+    projectsStore.init();
+  }
+});
 </script>
