@@ -120,6 +120,8 @@ const onRecieveMessage = (message: MessageInThread) => {
 watch(
   () => params.value.threadId as string,
   (newValue) => {
+    isSending.value = false;
+
     const newThread = projectThreads.value.find((t) => t.threadId === newValue);
     setThread(newThread);
 
