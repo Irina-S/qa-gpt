@@ -41,8 +41,8 @@ const projectsStore = useProjectsStore();
 
 watch(
   () => userStore.isAuthorized,
-  () => {
-    if (userStore.isAuthorized) {
+  (newVal, prevVal) => {
+    if (newVal && !prevVal) {
       wsStore.connect({ onError: onWsConnectError });
       window.onclose = () => wsStore.disconnect();
 
