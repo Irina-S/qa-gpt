@@ -13,11 +13,7 @@
 
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
-<<<<<<< aede35408dd1833778a386b9bdf9b844452c15a3
-import { onMounted, ref, watch } from 'vue';
-=======
 import { onMounted, ref } from 'vue';
->>>>>>> 8616d4c7f71176cc138679e85c1c6ef1a9bbc5d3
 
 import { useProjectsStore } from '@/store/projects';
 import { useWebSocketStore } from '@/store/ws';
