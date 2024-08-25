@@ -15,9 +15,9 @@ const userStore = useUserStore();
 const { meta } = toRefs(useRoute());
 
 const layoutComponent = computed(() => {
-  // if (!userStore.isAuthorized) {
-  //   return LayoutLoader;
-  // }
+  if (!userStore.isAuthorized) {
+    return LayoutLoader;
+  }
 
   switch (meta.value?.layout) {
     case 'login':
@@ -30,7 +30,6 @@ const layoutComponent = computed(() => {
 
 onMounted(() => {
   keycloakController.initKeycloak().then((res) => {
-    console.log('authorized', res);
     userStore.setIsAuthorized(res.authentificated);
   });
 });

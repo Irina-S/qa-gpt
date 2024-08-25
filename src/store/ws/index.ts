@@ -38,6 +38,9 @@ export const useWebSocketStore = defineStore('websocket', {
         receiveCb(JSON.parse(messageData.body))
       );
     },
+    unsubsribeFromMessages(topicId: string) {
+      this.stompClient?.unsubscribe(`/topic/messages/${topicId}`);
+    },
     sendMessage(topicId: string, message: string) {
       this.stompClient?.publish({
         destination: `/app/${topicId}/createMessage`,
@@ -46,7 +49,7 @@ export const useWebSocketStore = defineStore('websocket', {
     },
     async disconnect() {
       await this.stompClient?.deactivate();
-      this.isConnected = true;
+      this.isConnected = false;
     }
   }
 });

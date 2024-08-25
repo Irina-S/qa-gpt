@@ -132,11 +132,20 @@ watch(
 
 watch(
   () => [params.value.threadId as string, wsStore.isConnected],
-  ([threadId, isConnected]) => {
+  (newV, oldV) => {
+    console.log('w', oldV);
+    const [threadId, isConnected] = newV;
+    const [prevThreadId] = oldV ?? [];
+
+    if (isConnected && prevThreadId) {
+      wsStore.unsubsribeFromMessages(prevThreadId as string);
+    }
+
     if (isConnected && threadId) {
       wsStore.subscribeToMessages(threadId as string, onRecieveMessage);
     }
-  }
+  },
+  { immediate: true }
 );
 </script>
 

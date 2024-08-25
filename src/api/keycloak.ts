@@ -40,7 +40,6 @@ class KeycloakController {
         redirectUri: keycloakConfig.redirect_uri
       })
       .then<InitKeycloakResult>((authentificated) => {
-        console.log('from then', authentificated);
         if (authentificated) {
           console.log('AUTHETIFICATED, DATE: ', new Date());
           console.log(this.keycloak?.tokenParsed);
