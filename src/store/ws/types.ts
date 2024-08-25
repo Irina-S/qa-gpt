@@ -1,7 +1,7 @@
 import { Client } from '@stomp/stompjs';
 
 export interface WsStoreState {
-  stompClient: Client | null;
+  stompClient: Client;
   isConnected: boolean;
 }
 

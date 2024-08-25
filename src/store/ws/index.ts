@@ -1,22 +1,17 @@
 import { defineStore } from 'pinia';
-import { Client } from '@stomp/stompjs';
+
+import { stompClient } from '@/api/stomp';
 
 import type { WsStoreConnectParams, WsStoreState } from './types';
 
 export const useWebSocketStore = defineStore('websocket', {
   state: (): WsStoreState => ({
-    stompClient: null,
+    stompClient,
     isConnected: false
   }),
   actions: {
     connect({ onError }: WsStoreConnectParams) {
-      const apiUrl = import.meta.env.VITE_API_BASE_URL as string;
-      const wsUrl = apiUrl.replace(/^http(s?)/, 'ws') + '/ws';
-      this.stompClient = new Client({
-        brokerURL: wsUrl
-      });
-
-      this.stompClient.onConnect = (frame) => {
+      this.stompClient.onConnect = () => {
         this.isConnected = true;
       };
 

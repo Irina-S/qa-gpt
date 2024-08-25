@@ -3,7 +3,7 @@
     <h2 class="text-h2 mb-6">Диалоги</h2>
 
     <v-list nav density="compact" lines="two" class="py-0 d-flex flex-column ga-2">
-      <template v-for="tr in projectThreads" :key="tr.id">
+      <template v-for="(tr, idx) in projectThreads" :key="tr.id">
         <v-list-item
           :to="`/project/${project?.projectId}/thread/${tr.threadId}`"
           :ripple="false"
@@ -14,7 +14,7 @@
           </template>
 
           <v-list-item-title class="title font-weight-bold">{{
-            THREAD_ID_TO_NAME[tr.threadId]
+            THREAD_ID_TO_NAME[idx] ?? tr.threadId
           }}</v-list-item-title>
           <v-list-item-subtitle class="subtitle text-no-wrap" :style="{ textOverflow: 'ellipsis' }"
             >...</v-list-item-subtitle

@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
-import { onMounted, ref } from 'vue';
+import { ref, watch } from 'vue';
 
 import { useProjectsStore } from '@/store/projects';
 import { useWebSocketStore } from '@/store/ws';
@@ -28,8 +28,8 @@ const notification = ref({
   timeout: 5000
 });
 
-const onWsConnectError = (message: string) => {
-  notification.value.text = message;
+const onWsConnectError = () => {
+  notification.value.text = 'Ошибка подключения к веб-сокету';
   notification.value.visible = true;
 };
 
@@ -39,14 +39,16 @@ const wsStore = useWebSocketStore();
 
 const projectsStore = useProjectsStore();
 
-onMounted(() => {
-  console.log('base l', userStore.isAuthorized);
+watch(
+  () => userStore.isAuthorized,
+  () => {
+    if (userStore.isAuthorized) {
+      wsStore.connect({ onError: onWsConnectError });
+      window.onclose = () => wsStore.disconnect();
 
-  if (userStore.isAuthorized) {
-    wsStore.connect({ onError: onWsConnectError });
-    window.onclose = () => wsStore.disconnect();
-
-    projectsStore.init();
-  }
-});
+      projectsStore.init();
+    }
+  },
+  { immediate: true }
+);
 </script>
