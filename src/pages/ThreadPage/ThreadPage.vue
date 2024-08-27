@@ -2,7 +2,7 @@
   <div class="fill-height d-flex flex-column threadPage rounded-lg border-sm px-6">
     <div class="threadInfo d-flex justify-space-between pa-6">
       <div class="threadTitle text-h2 mr-auto">
-        {{ threadName }}
+        {{ thread?.threadName ?? '' }}
       </div>
       <v-icon icon="mdi-bell-outline" :size="24" class="iconBtn mr-5" />
       <v-icon icon="mdi-cog-outline" :size="24" class="iconBtn" />
@@ -31,8 +31,8 @@ import { getMessagesInThread } from './service';
 
 import { useProjectsStore } from '@/store/projects';
 import { useWebSocketStore } from '@/store/ws';
+import { useThreadsStore } from '@/store/threads';
 import { uploadSingleFileInProject } from '@/services/file';
-import { THREAD_ID_TO_NAME } from '@/utils/const';
 
 import type { MessageInThread } from './types';
 import type { MessageFormContent } from './components/MessageForm/types';
@@ -46,6 +46,10 @@ const { init, setThread } = projectsStore;
 
 const wsStore = useWebSocketStore();
 
+const threadsStore = useThreadsStore();
+const { threads, thread } = storeToRefs(threadsStore);
+const { setThreadWithName } = threadsStore;
+
 const messages = ref<MessageInThread[]>([]);
 const isSending = ref(false);
 const isLoading = ref(false);
@@ -55,8 +59,6 @@ const notification = ref({
   visible: false,
   timeout: 5000
 });
-
-const threadName = ref('');
 
 const loadFilesToProject = async (files: File[]) => {
   if (!files.length) {
@@ -125,7 +127,8 @@ watch(
     const newThread = projectThreads.value.find((t) => t.threadId === newValue);
     setThread(newThread);
 
-    threadName.value = THREAD_ID_TO_NAME[newValue] ?? newValue;
+    const newThreadWithName = threads.value.find((t) => t.threadId === newValue);
+    setThreadWithName(newThreadWithName);
 
     loadMessages();
   },
@@ -135,15 +138,17 @@ watch(
 watch(
   () => [params.value.threadId as string, wsStore.isConnected],
   (newV, oldV) => {
-    console.log('w', oldV);
+    console.log('new old value watcher');
     const [threadId, isConnected] = newV;
     const [prevThreadId] = oldV ?? [];
 
     if (isConnected && prevThreadId) {
+      console.log('unsubscibe');
       wsStore.unsubsribeFromMessages(prevThreadId as string);
     }
 
     if (isConnected && threadId) {
+      console.log('sbscribe');
       wsStore.subscribeToMessages(threadId as string, onRecieveMessage);
     }
   },

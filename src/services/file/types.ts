@@ -1,4 +1,4 @@
-import type { Project } from '@/store/projects/types';
+import type { Project } from '@/types/common';
 
 export interface UploadSingleFileInProjectRequest {
   projectId: string;

@@ -14,7 +14,8 @@ import {
   VTextField,
   VTextarea,
   VSnackbar,
-  VProgressCircular
+  VProgressCircular,
+  VSkeletonLoader
 } from 'vuetify/components';
 
 const vuetify = createVuetify({
@@ -33,7 +34,8 @@ const vuetify = createVuetify({
     VField,
     VTextField,
     VTextarea,
-    VSnackbar
+    VSnackbar,
+    VSkeletonLoader
   },
   icons: {
     defaultSet: 'mdi'

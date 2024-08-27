@@ -1,9 +1,11 @@
 <template>
   <div class="nav rounded-lg border py-9">
     <div class="d-flex flex-column align-center mb-9">
-      <v-avatar :size="48" color="#20202014" class="mb-2" />
-      <div class="userName font-weight-bold">Админ</div>
-      <div class="userEmail">admin@egar.ru</div>
+      <v-avatar :size="48" color="#20202014" class="mb-2">
+        <v-icon icon="mdi-account" :size="36" color="#9aa0a6" />
+      </v-avatar>
+      <div class="userName font-weight-bold">User</div>
+      <div class="userEmail">user@egar.ru</div>
     </div>
 
     <v-list nav class="pa-0">
@@ -29,21 +31,17 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
 import { useProjectsStore } from '@/store/projects';
 
 import keyclockController from '@/api/keycloak';
 
-const router = useRouter();
-
 const projectsStore = useProjectsStore();
 const { projects } = storeToRefs(projectsStore);
 
 const onLogout = () => {
   keyclockController.logout();
-  // router.push({ name: 'login' });
 };
 </script>
 

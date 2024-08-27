@@ -6,8 +6,6 @@
 </template>
 
 <script setup lang="ts">
-import { setLoggedIn } from '@/utils/auth';
-
 import LoginForm from './components/LoginForm/LoginForm.vue';
 import { useRouter } from 'vue-router';
 

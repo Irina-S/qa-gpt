@@ -1,7 +1,8 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 
-import type { Project, ProjectThread } from './types';
+import type { Project, ProjectThread } from '@/types/common';
+
 import { getProjectsList } from './service';
 
 export const useProjectsStore = defineStore('project', () => {
