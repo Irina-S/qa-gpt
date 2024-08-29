@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import { Client } from '@stomp/stompjs';
-
-import type { WsStoreConnectParams, WsStoreState } from './types';
 
 import { stompClient } from '@/api/stomp';
+
+import type { WsStoreConnectParams, WsStoreState } from './types';
+import { useUserStore } from '@/store//user';
 
 export const useWebSocketStore = defineStore('websocket', {
   state: (): WsStoreState => ({
@@ -12,12 +12,6 @@ export const useWebSocketStore = defineStore('websocket', {
   }),
   actions: {
     connect({ onError }: WsStoreConnectParams) {
-      // const apiUrl = import.meta.env.VITE_API_BASE_URL as string;
-      // const wsUrl = apiUrl.replace(/^http(s?)/, 'ws') + '/ws';
-      // this.stompClient = new Client({
-      //   brokerURL: wsUrl
-      // });
-
       this.stompClient.onConnect = () => {
         this.isConnected = true;
       };
@@ -31,24 +25,33 @@ export const useWebSocketStore = defineStore('websocket', {
       };
 
       this.stompClient.activate();
+
+      window.onclose = () => this.disconnect();
     },
     // @@TODO: избавиться от any
     subscribeToMessages(topicId: string, receiveCb: (...args: any[]) => void) {
-      this.stompClient?.subscribe(`/topic/messages/${topicId}`, (messageData) =>
-        receiveCb(JSON.parse(messageData.body))
+      // @@TODO: возможно из за этой строчки стоит прееделать весь ws store в стиле composition api для единого стиля
+      const userStore = useUserStore();
+      const { profile } = userStore;
+      const { id = '' } = profile;
+
+      this.stompClient.subscribe(
+        `/topic/messages/${topicId}`,
+        (messageData) => receiveCb(JSON.parse(messageData.body)),
+        { id }
       );
     },
     unsubsribeFromMessages(topicId: string) {
-      this.stompClient?.unsubscribe(`/topic/messages/${topicId}`);
+      this.stompClient.unsubscribe(`/topic/messages/${topicId}`);
     },
     sendMessage(topicId: string, message: string) {
-      this.stompClient?.publish({
+      this.stompClient.publish({
         destination: `/app/${topicId}/createMessage`,
         body: message
       });
     },
     async disconnect() {
-      await this.stompClient?.deactivate();
+      await this.stompClient.deactivate();
       this.isConnected = false;
     }
   }

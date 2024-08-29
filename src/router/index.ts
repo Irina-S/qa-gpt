@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import { useUserStore } from '@/store/user';
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -38,7 +36,7 @@ const router = createRouter({
   ]
 });
 
-// @@TODO: вернуть кастомную страницу авторизации по возможности
+// @@TODO: вернуть кастомную страницу авторизации при необходимости
 // router.beforeEach((to, from, next) => {
 //   const userStore = useUserStore();
 

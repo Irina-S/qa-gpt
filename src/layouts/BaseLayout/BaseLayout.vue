@@ -41,12 +41,19 @@ const projectsStore = useProjectsStore();
 
 watch(
   () => userStore.isAuthorized,
-  () => {
-    if (userStore.isAuthorized) {
-      wsStore.connect({ onError: onWsConnectError });
-      window.onclose = () => wsStore.disconnect();
+  async () => {
+    try {
+      if (userStore.isAuthorized) {
+        await userStore.initProfile();
 
-      projectsStore.init();
+        wsStore.connect({ onError: onWsConnectError });
+
+        await projectsStore.init();
+      }
+    } catch (error) {
+      // @ts-ignore
+      notification.value.text = error.message;
+      notification.value.visible = true;
     }
   },
   { immediate: true }

@@ -20,8 +20,6 @@ class KeycloakController {
   constructor() {
     this.keycloak = new Keycloak(keycloakConfig);
 
-    // this.keycloak.redirectUri = keycloakConfig.redirect_uri;
-
     this.keycloak.onAuthSuccess = () => {
       this.onAuthSubscribers.forEach((item) => item(this.getParsedToken()));
       this.onAuthSubscribers = [];

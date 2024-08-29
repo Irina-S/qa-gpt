@@ -1,11 +1,18 @@
 import { ref, computed } from 'vue';
-import { defineStore } from 'pinia';
+import { defineStore, storeToRefs } from 'pinia';
+
+import { getProjectsList } from '@/services/project';
+
+import { useUserStore } from '@/store/user';
 
 import type { Project, ProjectThread } from '@/types/common';
 
-import { getProjectsList } from './service';
-
 export const useProjectsStore = defineStore('project', () => {
+  const userStore = useUserStore();
+  const { isAdminMode } = storeToRefs(userStore);
+
+  const isLoading = ref(false);
+
   const projects = ref<Project[]>();
 
   const project = ref<Project>();
@@ -15,8 +22,16 @@ export const useProjectsStore = defineStore('project', () => {
   const thread = ref<ProjectThread>();
 
   async function loadProjects() {
-    const { data } = await getProjectsList();
-    projects.value = data;
+    try {
+      isLoading.value = true;
+      const { data } = await getProjectsList(isAdminMode.value);
+      projects.value = data;
+      // eslint-disable-next-line no-useless-catch
+    } catch (error) {
+      throw error;
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   async function init() {
@@ -35,5 +50,15 @@ export const useProjectsStore = defineStore('project', () => {
     thread.value = newThread;
   }
 
-  return { projects, project, projectThreads, projectFiles, init, setProject, thread, setThread };
+  return {
+    projects,
+    project,
+    projectThreads,
+    projectFiles,
+    init,
+    setProject,
+    thread,
+    setThread,
+    isLoading
+  };
 });

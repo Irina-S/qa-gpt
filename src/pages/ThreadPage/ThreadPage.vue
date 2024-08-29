@@ -124,6 +124,7 @@ watch(
   (newValue) => {
     isSending.value = false;
 
+    // @@TODO: возможно это уже не нужно
     const newThread = projectThreads.value.find((t) => t.threadId === newValue);
     setThread(newThread);
 
@@ -138,17 +139,14 @@ watch(
 watch(
   () => [params.value.threadId as string, wsStore.isConnected],
   (newV, oldV) => {
-    console.log('new old value watcher');
     const [threadId, isConnected] = newV;
     const [prevThreadId] = oldV ?? [];
 
     if (isConnected && prevThreadId) {
-      console.log('unsubscibe');
       wsStore.unsubsribeFromMessages(prevThreadId as string);
     }
 
     if (isConnected && threadId) {
-      console.log('sbscribe');
       wsStore.subscribeToMessages(threadId as string, onRecieveMessage);
     }
   },
